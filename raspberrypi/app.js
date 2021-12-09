@@ -11,6 +11,7 @@ import {
 } from "./controllers/matrix";
 import { O, Xcolors } from "./models/colors";
 
+const IMU = new imu.IMU();
 // const { Test } = require("./models/matrix");
 
 // const app = express();
@@ -42,7 +43,7 @@ const axisX = {
   color: Xcolors[3],
 };
 const axisY = {
-  angle: 30,
+  angle: -60,
   color: Xcolors[2],
 };
 
@@ -84,7 +85,6 @@ const fillOutMatirx = (valueX, axisX, axisY) => {
 
 fillOutMatirx(valueX, axisX, axisY);
 
-const delay = 250;
 // const intervalDelay = delay * matrixArray.length;
 // console.log(Leds);
 // setInterval(() => {
@@ -110,82 +110,63 @@ const delay = 250;
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-// setInterval(() => {
-//   const IMU = new imu.IMU();
+const pi = Math.PI;
+let ax = 0;
+let ay = 0;
+let az = 0;
+let x = 0;
+let y = 0;
+let z = 0;
 
-//   IMU.getValue((err, data) => {
-//     // if (err !== null) {
-//     //   console.error("Could not read sensor data: ", err);
-//     //   return;
-//     // }
+let angle_x = 0;
+let angle_y = 0;
+let ax_sum = 0;
+let ay_sum = 0;
+let az_sum = 0;
 
-//     const headingToDegree = (heading) => {
-//       // Convert radians to degrees for readability.
-//       // return (heading * 180) / Math.PI;
-//       return 1 / heading;
-//     };
-//     // console.log("Gyroscope is: ", JSON.stringify(data.gyro["x"], null, "  "));
-//     console.log("Gyroscope is: ");
-//     console.log(
-//       "x: ",
-//       JSON.stringify(headingToDegree(data.gyro["x"]), null, "  ")
-//     );
-//     console.log(
-//       "y: ",
-//       JSON.stringify(headingToDegree(data.gyro["y"]), null, "  ")
-//     );
-//     console.log(
-//       "z: ",
-//       JSON.stringify(headingToDegree(data.gyro["z"]), null, "  ")
-//     );
+const angleArray = [];
 
-//     //   console.log("Accelleration is: ", JSON.stringify(data.accel, null, "  "));
-//     //   console.log("Compass is: ", JSON.stringify(data.compass, null, "  "));
-//     //   console.log("Fusion data is: ", JSON.stringify(data.fusionPose, null, "  "));
+const countSample = 10; // aproximation 10
+const delay = 10; // 400
+const show = 20;
 
-//     //   console.log("Temp is: ", data.temperature);
-//     //   console.log("Pressure is: ", data.pressure);
-//     //   console.log("Humidity is: ", data.humidity);
-//   });
-// });
+setInterval(() => {
+  for (let sample = 0; sample < countSample; sample++) {
+    //TODO: IMU nie w pętli for tylko, z opóźnieniem delay i od tego aproximation
+    IMU.getValue((err, data) => {
+      ax = data.accel["x"];
+      ay = data.accel["y"];
+      az = data.accel["z"];
+      ax_sum = ax_sum + ax;
+      ay_sum = ay_sum + ay;
+      az_sum = az_sum + az;
+    });
+  }
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// const IMU = new imu.IMU();
-// console.log("<<<<<<<<<<<<< ");
+  x = ax_sum / countSample;
+  y = ay_sum / countSample;
+  z = az_sum / countSample;
 
-// const headingCorrection = (heading, offset = 0) => {
-//   // Once you have your heading, you must then add your 'Declination Angle', which is the 'Error' of the magnetic field in your location.
-//   // Find yours here: http://www.magnetic-declination.com/
-//   const declinationAngle = 0.03106686;
+  // Calculate of roll and pitch in deg
+  angle_x = Math.atan2(x, Math.sqrt(y * y + z * z)) / (pi / 180);
+  angle_y = Math.atan2(y, Math.sqrt(x * x + z * z)) / (pi / 180);
 
-//   heading += declinationAngle + offset;
+  // Reset values for next aproximation
+  ax_sum = 0;
+  ay_sum = 0;
+  az_sum = 0;
 
-//   // Correct for when signs are reversed.
-//   if (heading < 0) {
-//     heading += 2 * Math.PI;
-//   }
+  // console.log("angle_x");
+  // console.log(angle_x);
+  // console.log("angle_y");
+  // console.log(angle_y);
 
-//   // Check for wrap due to addition of declination.
-//   if (heading > 2 * Math.PI) {
-//     heading -= 2 * Math.PI;
-//   }
-
-//   return heading;
-// };
-
-// const headingToDegree = (heading) => {
-//   // Convert radians to degrees for readability.
-//   return (heading * 180) / Math.PI;
-// };
-
-// IMU.getValue((err, data) => {
-//   if (err !== null) {
-//     console.error("Could not read data: ", err);
-//   }
-
-//   console.log(
-//     "Tilt heading is: ",
-//     headingToDegree(headingCorrection(data.tiltHeading, Math.PI / 2))
-//   );
-// });
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  angleArray.push(angle_x.toFixed(0));
+  if (angleArray.length === show) {
+    // const angle = angleArray.sort((a, b) => a - b)[show / 2];
+    const angle = angleArray.sort((a, b) => a - b);
+    console.log(`> > ${angle}`);
+    angleArray.length = 0;
+    console.log(Math.floor(delay / countSample));
+  }
+}, delay);
