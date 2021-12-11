@@ -1,4 +1,4 @@
-import * as Matrix from "../models/matrix";
+import * as Matrix from "../constants/pixels";
 
 const setAxisRangePixel = (axis, angle) => {
   let matrixAxis;
@@ -20,8 +20,8 @@ const setAxisRangePixel = (axis, angle) => {
   }
 };
 
-const separatedNumberX_ = (number) => (number - (number % 10)) / 10;
-const separatedNumber_X = (number) => number % 10;
+const separatedNumberX_ = (number) => Math.abs((number - (number % 10)) / 10);
+const separatedNumber_X = (number) => Math.abs(number % 10);
 
 const setMainCross = (cross) => {
   let mainCross = [];
