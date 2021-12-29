@@ -1,25 +1,10 @@
 import express from "express";
 
-import { Leds, Imu as imu } from "node-sense-hat";
+import { Leds } from "node-sense-hat";
 
-import * as Pixels from "./constants/pixels.js";
-import { O } from "./constants/colors";
+import { IMU } from "./constants/IMU";
 import { ValueX, AxisX, AxisY } from "./models/Matrix";
-
-import {
-  setAxisRangePixel,
-  separatedNumberX_,
-  separatedNumber_X,
-  setMainCross,
-} from "./controllers/matrix";
-
-const IMU1 = new imu.IMU();
-const IMU2 = new imu.IMU();
-const IMU3 = new imu.IMU();
-const IMU4 = new imu.IMU();
-const IMU = [IMU1, IMU2, IMU3, IMU4];
-
-// const { Test } = require("./models/matrix");
+import { fillOutMatirx } from "./controllers/matrix";
 
 // const app = express();
 
@@ -41,55 +26,8 @@ const IMU = [IMU1, IMU2, IMU3, IMU4];
 
 /////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-Leds.setRotation(180);
-
-//TODO: fillOutMatirx to another folder
-const fillOutMatirx = (valueX, axisX, axisY) => {
-  const newMatrix = [...Pixels.emptyModel];
-  const separatedArrayX_ =
-    Pixels.modelsFrom0to9[separatedNumberX_(valueX.angle)];
-  const separatedArray_X =
-    Pixels.modelsFrom0to9[separatedNumber_X(valueX.angle)];
-
-  const X_ = separatedArrayX_.map((px) => px + Pixels.startX_);
-  const _X = separatedArray_X.map((px) => px + Pixels.start_X);
-
-  const axisXpx = setAxisRangePixel("X", axisX.angle);
-  const axisYpx = setAxisRangePixel("Y", axisY.angle);
-
-  const matrixArray = X_.concat(_X)
-    .concat(axisXpx)
-    .concat(axisYpx)
-    .sort((a, b) => a - b);
-
-  const absX_ = valueX.angle >= 0 ? 1 : 0;
-  const abs_X = valueX.angle >= 0 ? 0 : 1;
-
-  let pixel = 0;
-  for (let i = 0; i < 8; i++) {
-    for (let j = 0; j < 8; j++) {
-      pixel = i * 8 + j;
-      if (matrixArray.includes(pixel)) {
-        if (X_.includes(pixel)) newMatrix[i][j] = valueX.color[absX_];
-        if (_X.includes(pixel)) newMatrix[i][j] = valueX.color[abs_X];
-        if (axisYpx.includes(pixel)) newMatrix[i][j] = axisY.color;
-        if (axisXpx.includes(pixel)) newMatrix[i][j] = axisX.color;
-      } else {
-        newMatrix[i][j] = O;
-      }
-    }
-  }
-
-  Leds.sync.setPixels(setMainCross(newMatrix));
-};
-
-// !!!!!!!!!!!! MATRIX !!!!!!!!!!!!!
-// fillOutMatirx(valueX, axisX, axisY);
-
-// const axisY = [0, 8, 16, 24, 32, 40, 48, 56];
-// console.log(setAxisRangePixel("X", 80));
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//TODO: Must be uncommented !!!
+// Leds.setRotation(180);
 
 let actualSample = 0;
 let ax_sum = 0;
@@ -104,11 +42,12 @@ const loop = IMU.length;
 const countSample = 10; // aproximation 10
 const delay = 21; // 400
 const stack = 10;
+let start, end, time;
 
 setInterval(() => {
   for (let i = 0; i < loop; i++) {
     setTimeout(() => {
-      const start = new Date().getTime();
+      start = new Date().getTime();
       IMU[i].getValue((err, data) => {
         const ax = data.accel["x"];
         const ay = data.accel["y"];
@@ -116,8 +55,8 @@ setInterval(() => {
         ax_sum += ax;
         ay_sum += ay;
         az_sum += az;
-        const end = new Date().getTime();
-        const time = end - start;
+        end = new Date().getTime();
+        time = end - start;
         timeArray.push(time);
       });
       actualSample++;
