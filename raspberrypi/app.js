@@ -5,9 +5,11 @@ import { Leds } from "node-sense-hat";
 import { IMU } from "./constants/IMU";
 import { ValueX, AxisX, AxisY } from "./models/Matrix";
 import { fillOutMatirx } from "./controllers/matrix";
+import socket from "./socket";
 
 const app = express();
 const port = process.env.PORT || 8080;
+let httpRawData;
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -27,23 +29,20 @@ app.use((err, req, res, next) => {
 
 app.get("/", (req, res) => {
   res.send("Serwer działa");
+  socket.getIO().emit("serverData", { action: "create", value: "dataSocket" });
+});
+
+app.get("/http-data", (req, res) => {
+  res.send({ value: httpRawData.value });
 });
 
 const server = app.listen(port, () => {
   console.log(`Serve at http://localhost:${port}`);
 });
 
-const io = require("socket.io")(server);
+const io = socket.init(server);
 io.on("connection", (socket) => {
   console.log("Client connected");
-  //   // console.log("socket.id"); // x8WIv7-mJelg7on_ALbx
-  //   // console.log(socket.id); // x8WIv7-mJelg7on_ALbx
-  //   // client.on("event", (data) => {
-  //   //   /* … */
-  //   // });
-  //   // client.on("disconnect", () => {
-  //   //   /* … */
-  //   // });
 });
 
 //TODO: Must be uncommented !!!
@@ -119,6 +118,14 @@ setInterval(() => {
     ValueX.angle = angleMedianArrayX;
     AxisX.angle = angleMedianArrayX;
     AxisY.angle = angleMedianArrayY;
+
+    // Websocket
+    socket
+      .getIO()
+      .emit("serverData", { action: "create", value: ValueX.angle });
+
+    // Http
+    httpRawData = { value: ValueX.angle };
 
     fillOutMatirx(ValueX, AxisX, AxisY);
 
