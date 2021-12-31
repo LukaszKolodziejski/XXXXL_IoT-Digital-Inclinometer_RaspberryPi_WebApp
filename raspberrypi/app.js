@@ -6,25 +6,45 @@ import { IMU } from "./constants/IMU";
 import { ValueX, AxisX, AxisY } from "./models/Matrix";
 import { fillOutMatirx } from "./controllers/matrix";
 
-// const app = express();
+const app = express();
+const port = process.env.PORT || 8080;
 
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  next();
+});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// app.get("/", (req, res) => {
-//   res.send("Serwer działa");
-// });
+app.use((err, req, res, next) => {
+  res.status(500).send({ message: err.message });
+});
 
-// app.use((err, req, res, next) => {
-//   res.status(500).send({ message: err.message });
-// });
+app.get("/", (req, res) => {
+  res.send("Serwer działa");
+});
 
-// const port = process.env.PORT || 8080;
-// app.listen(port, () => {
-//   console.log(`Serve at http://localhost:${port}`);
-// });
+const server = app.listen(port, () => {
+  console.log(`Serve at http://localhost:${port}`);
+});
 
-/////////<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+const io = require("socket.io")(server);
+io.on("connection", (socket) => {
+  console.log("Client connected");
+  //   // console.log("socket.id"); // x8WIv7-mJelg7on_ALbx
+  //   // console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+  //   // client.on("event", (data) => {
+  //   //   /* … */
+  //   // });
+  //   // client.on("disconnect", () => {
+  //   //   /* … */
+  //   // });
+});
 
 //TODO: Must be uncommented !!!
 // Leds.setRotation(180);
@@ -40,7 +60,7 @@ const timeArray = [];
 
 const loop = IMU.length;
 const countSample = 10; // aproximation 10
-const delay = 21; // 400
+const delay = 21;
 const stack = 10;
 let start, end, time;
 
@@ -85,7 +105,7 @@ setInterval(() => {
     const angleArrayYCopy = [...angleArrayY];
     angleArrayXCopy.sort((a, b) => a - b);
     angleArrayYCopy.sort((a, b) => a - b);
-    console.log(`> > ${angleArrayXCopy}`);
+    // console.log(`> > ${angleArrayXCopy}`);
 
     const medianPointerArrayX = Math.floor(angleArrayXCopy.length / 2);
     const medianPointerArrayY = Math.floor(angleArrayYCopy.length / 2);
@@ -93,8 +113,8 @@ setInterval(() => {
     const angleMedianArrayX = angleArrayXCopy[medianPointerArrayX];
     const angleMedianArrayY = angleArrayYCopy[medianPointerArrayY];
 
-    console.log("angleMedianArrayX");
-    console.log(angleMedianArrayX);
+    // console.log("angleMedianArrayX");
+    // console.log(angleMedianArrayX);
 
     ValueX.angle = angleMedianArrayX;
     AxisX.angle = angleMedianArrayX;
@@ -110,7 +130,7 @@ setInterval(() => {
     timeArray.forEach((time) => (sumeOfTime += time));
     const sensorDelay = sumeOfTime / timeArray.length;
 
-    console.log(`loopDelay: ${loopDelay} | sensorDelay: ${sensorDelay}`);
+    // console.log(`loopDelay: ${loopDelay} | sensorDelay: ${sensorDelay}`);
 
     timeArray.length = 0;
   }
