@@ -21,6 +21,7 @@
     "mongodb": "^4.1.2",
     "mongoose": "^6.0.6",
     "mqtt": "^4.3.2",
+    "node-netcat": "^1.4.8",
     "node-sense-hat": "0.0.2",
     "pigpio": "^3.3.1",
     "socket.io": "^4.4.0"

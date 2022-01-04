@@ -4,9 +4,8 @@ let server;
 let rawData;
 
 export default {
-  init: () => {
+  init: (port) => {
     const app = express();
-    const port = process.env.PORT || 8080;
 
     // Express
     app.use(function (req, res, next) {
@@ -30,7 +29,7 @@ export default {
     });
 
     server = app.listen(port, () => {
-      console.log(`Serve at http://localhost:${port}`);
+      console.log(`Serve at http://192.168.1.131:${port}`);
     });
 
     return server;
