@@ -2,6 +2,7 @@ import Socket from "../protocols/Socket";
 import Mqtt from "../protocols/Mqtt";
 import Http from "../protocols/Http";
 import Tcp from "../protocols/Tcp";
+import Udp from "../protocols/Udp";
 import { connectUrl, clientId } from "../constants/mqtt";
 
 const initProtocols = () => {
@@ -19,6 +20,10 @@ const initProtocols = () => {
 
   // TCP
   Tcp.init(1337);
+
+  // UDP
+  Udp.init(5000);
+  Udp.initStream();
 };
 
 export { initProtocols };
