@@ -11,7 +11,7 @@ export default {
     const portTCP = port;
     const hostTCP = "192.168.1.131";
 
-    var serverTCP = Net.createServer((socket) => {
+    const serverTCP = Net.createServer((socket) => {
       serverSocketTcp = socket;
       socket.write("1 Echo serverTCP\r\n");
       socket.pipe(socket);
@@ -31,7 +31,7 @@ export default {
 
     // Client TCP
 
-    var clientTCP = new Net.Socket();
+    const clientTCP = new Net.Socket();
     clientTCP.connect(portTCP, hostTCP, () => {
       clientTCP.write("Client TCP is Connected");
     });
