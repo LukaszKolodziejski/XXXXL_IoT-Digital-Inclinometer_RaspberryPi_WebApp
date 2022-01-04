@@ -1,8 +1,11 @@
+import Server from "./Http";
+
 let io;
 
 export default {
-  init: (httpServer) => {
-    io = require("socket.io")(httpServer);
+  init: (port) => {
+    const server = Server.init(port);
+    io = require("socket.io")(server);
     return io;
   },
   getIO: () => {
