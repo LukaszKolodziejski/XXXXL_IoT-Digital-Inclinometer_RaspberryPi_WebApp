@@ -7,7 +7,10 @@ import { initProtocols } from "./functions/initProtocols";
 import Socket from "./protocols/Socket";
 import Mqtt from "./protocols/Mqtt";
 import Http from "./protocols/Http";
+import Tcp from "./protocols/Tcp";
 import { topic } from "./constants/mqtt";
+
+// var Netcat = require("node-netcat");
 
 //TODO: Must be uncommented !!!
 // Leds.setRotation(180);
@@ -15,10 +18,15 @@ import { topic } from "./constants/mqtt";
 const sendRawData = (rawData) => {
   // HTTP
   Http.setRawData(rawData);
+
   // Websocket
   Socket.getIO().emit("serverData", { action: "create", rawData });
+
   // MQTT
   Mqtt.getClient().publish(topic, rawData, { qos: 0, retain: false });
+
+  // TCP
+  Tcp.getSocket().write(rawData);
 };
 
 const main = () => {
