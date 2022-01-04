@@ -19,6 +19,7 @@ const App = () => {
   const [socketValue, setSocketValue] = useState("nothing");
   const [httpValue, setHttpValue] = useState("nothing");
   const [tcpValue, setTcpValue] = useState("nothing");
+  const [udpValue, setUdpValue] = useState("nothing");
 
   useEffect(() => {
     // Websocket
@@ -50,6 +51,12 @@ const App = () => {
     socketTcp.on("serverDataTCP", (data) => {
       if (data.action === "create") setTcpValue(data.rawData);
     });
+
+    // UDP
+    const socketUdp = openSocket("ws://192.168.1.131:5050/", options);
+    socketUdp.on("serverDataUDP", (data) => {
+      if (data.action === "create") setUdpValue(data.rawData);
+    });
   }, []);
 
   useEffect(() => {
@@ -78,6 +85,7 @@ const App = () => {
         <p>Socket Value: {socketValue}</p>
         <p>MQTT Value: {mqttValue}</p>
         <p>TCP Value: {tcpValue}</p>
+        <p>UDP Value: {udpValue}</p>
         <p>Http Value: {httpValue}</p>
         <p>
           connectionStatus: {connectStatus ? connectStatus.toString() : "n/n"}
