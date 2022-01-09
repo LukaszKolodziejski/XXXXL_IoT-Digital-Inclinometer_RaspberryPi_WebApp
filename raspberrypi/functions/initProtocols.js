@@ -21,9 +21,9 @@ const initProtocols = () => {
   // TCP
   Tcp.init(1337);
 
-  // // UDP
-  // Udp.init(5000);
-  // Udp.initStream();
+  // UDP
+  Udp.init(5000);
+  Udp.initStream();
 };
 
 export { initProtocols };
