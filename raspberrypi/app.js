@@ -11,20 +11,34 @@ import Tcp from "./protocols/Tcp";
 import Udp from "./protocols/Udp";
 import { topic } from "./constants/mqtt";
 
-//TODO: Must be uncommented !!!
-// Leds.setRotation(180);
+Leds.setRotation(180);
 
-const sendRawData = (rawData) => {
-  // HTTP
-  Http.setRawData(rawData);
-  // Websocket
-  Socket.getIO().emit("serverData", { action: "create", rawData });
-  // MQTT
-  Mqtt.getClient().publish(topic, rawData, { qos: 0, retain: false });
-  // TCP
-  Tcp.getSocket().write(rawData);
-  // UDP
-  Udp.getSocket().send(rawData);
+const rawDataHandler = (data) => {
+  const startTime = new Date().getTime();
+  return { data, startTime };
+};
+
+const sendRawData = (data) => {
+  //TODO: rawData -> data
+  // HTTP || transferTime => OK
+  Http.setRawData(rawDataHandler(data));
+  // Websocket || transferTime => OK
+  Socket.getIO().emit("serverData", {
+    action: "create",
+    rawData: rawDataHandler(data),
+  });
+  // Socket.getIO().emit("serverData", { action: "create", rawData });
+  // // MQTT
+  // Mqtt.getClient().publish(topic, rawData, { qos: 0, retain: false });
+  // TCP || transferTime => OK
+  Tcp.getSocket().write(Buffer.from(JSON.stringify(rawDataHandler(data))));
+  // // UDP
+  // Udp.getSocket().send(rawData);
+};
+
+const timeSynchronizationHandler = () => {
+  const start = new Date().getTime() + 10;
+  Socket.getIO().emit("syncTime", { action: "sync", start });
 };
 
 const main = () => {
@@ -46,10 +60,12 @@ const main = () => {
   initProtocols();
 
   setInterval(() => {
+    timeSynchronizationHandler();
     for (let i = 0; i < loop; i++) {
       setTimeout(() => {
         start = new Date().getTime();
         IMU[i].getValue((err, data) => {
+          sendRawData(data);
           const ax = data.accel["x"];
           const ay = data.accel["y"];
           const az = data.accel["z"];
@@ -101,7 +117,8 @@ const main = () => {
       AxisX.angle = angleMedianArrayX;
       AxisY.angle = angleMedianArrayY;
 
-      sendRawData(ValueX.angle);
+      //TODO: This work.
+      // sendRawData(ValueX.angle);
 
       fillOutMatirx(ValueX, AxisX, AxisY);
 
