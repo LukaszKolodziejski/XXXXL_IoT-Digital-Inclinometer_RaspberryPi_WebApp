@@ -36,12 +36,9 @@ export default {
       clientTCP.write("Client TCP is Connected");
     });
 
-    clientTCP.on("data", (rawData) => {
-      console.log("Received: " + rawData);
-      streamTcp.emit("serverDataTCP", {
-        action: "create",
-        rawData: `${rawData}`,
-      });
+    clientTCP.on("data", (buffer) => {
+      // console.log("Received: " + buffer);
+      streamTcp.emit("serverDataTCP", { buffer });
     });
 
     return serverSocketTcp;
