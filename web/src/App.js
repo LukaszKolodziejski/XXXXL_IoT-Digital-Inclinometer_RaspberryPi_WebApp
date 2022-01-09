@@ -51,6 +51,23 @@ const App = () => {
   const bufferToReceivedDataHandler = (buffer) => {
     const view = new Uint8Array(buffer);
     const stringData = new TextDecoder().decode(view);
+    // console.log(stringData);
+    try {
+      const rawData = JSON.parse(stringData);
+      return receivedDataHandler({ rawData });
+    } catch (e) {
+      setErr(e);
+      return null;
+    }
+  };
+
+  const mqttBufferToReceivedDataHandler = (buffer) => {
+    // console.log(buffer);
+    const view = new Uint8Array(buffer);
+    // console.log(view);
+    // const stringData = new TextDecoder().decode(view);
+    const stringData = new TextDecoder().decode(buffer);
+    console.log(stringData);
     try {
       const rawData = JSON.parse(stringData);
       return receivedDataHandler({ rawData });
@@ -75,33 +92,33 @@ const App = () => {
 
     timeSynchronizationHandler(socket);
 
-    socket.on("serverData", (data) => {
-      if (data.action === "create") setSocketValue(receivedDataHandler(data));
-    });
+    // socket.on("serverData", (data) => {
+    //   if (data.action === "create") setSocketValue(receivedDataHandler(data));
+    // });
 
-    // // MQTT
-    // setClient(mqtt.connect(connectUrl, { clientId }));
+    // MQTT
+    setClient(mqtt.connect(connectUrl, { clientId }));
 
     // HTTP || transferTime => OK
-    setInterval(() => {
-      axios
-        .get("/http-data")
-        .then((res) => {
-          if (res) {
-            setHttpValue(receivedDataHandler(res.data));
-          }
-        })
-        // .catch((err) => console.log(err));
-        .catch((err) => setErr(err));
-      // }, 5.25);
-    }, 20);
+    // setInterval(() => {
+    //   axios
+    //     .get("/http-data")
+    //     .then((res) => {
+    //       if (res) {
+    //         setHttpValue(receivedDataHandler(res.data));
+    //       }
+    //     })
+    //     // .catch((err) => console.log(err));
+    //     .catch((err) => setErr(err));
+    //   // }, 5.25);
+    // }, 20);
 
     // TCP || transferTime => OK
-    const socketTcp = openSocket("ws://192.168.1.131:1338/", options);
-    socketTcp.on("serverDataTCP", ({ buffer }) => {
-      const receivedData = bufferToReceivedDataHandler(buffer);
-      if (receivedData) setTcpValue(receivedData);
-    });
+    // const socketTcp = openSocket("ws://192.168.1.131:1338/", options);
+    // socketTcp.on("serverDataTCP", ({ buffer }) => {
+    //   const receivedData = bufferToReceivedDataHandler(buffer);
+    //   if (receivedData) setTcpValue(receivedData);
+    // });
 
     // // UDP
     // const socketUdp = openSocket("ws://192.168.1.131:5050/", options);
@@ -111,34 +128,39 @@ const App = () => {
     // }, [syncTime]);
   }, []);
 
-  // useEffect(() => {
-  //   if (client) {
-  //     client.on("connect", () => {
-  //       client.subscribe(topic, () => console.log(`Subscribe: '${topic}'`));
-  //       setConnectStatus("Connected");
-  //     });
-  //     client.on("error", (err) => {
-  //       console.error(`Connection error: ${err}`);
-  //       client.end();
-  //     });
-  //     client.on("reconnect", () => setConnectStatus("Reconnecting"));
+  useEffect(() => {
+    if (client) {
+      client.on("connect", () => {
+        client.subscribe(topic, () => console.log(`Subscribe: '${topic}'`));
+        setConnectStatus("Connected");
+      });
+      client.on("error", (err) => {
+        console.error(`Connection error: ${err}`);
+        client.end();
+      });
+      client.on("reconnect", () => setConnectStatus("Reconnecting"));
 
-  //     client.on("message", (topic, message) => {
-  //       const payload = { topic, message: message.toString() };
-  //       // console.log(payload);
-  //       setMqttValue(payload.message);
-  //     });
-  //   }
-  // }, [client]);
+      client.on("message", (topic, message) => {
+        // const payload = { topic, message: message.toString() };
+        const payload = {
+          topic,
+          // message: mqttBufferToReceivedDataHandler(message),
+          message: bufferToReceivedDataHandler(message),
+        };
+        // console.log(payload);
+        setMqttValue(payload.message);
+      });
+    }
+  }, [client]);
 
   return (
     <div className="App">
       <header className="App-header">
         {/* <p>Socket Value: {socketValue.data}</p> */}
         <p>Socket Trans Time: {socketValue.transferTime}</p>
-        {/* <p>------------------</p>
-        <p>MQTT Value: {mqttValue.data}</p>
-        <p>MQTT Trans Time: {mqttValue.transferTime}</p> */}
+        <p>------------------</p>
+        {/* <p>MQTT Value: {mqttValue.data}</p> */}
+        <p>MQTT Trans Time: {mqttValue.transferTime}</p>
         <p>------------------</p>
         {/* <p>TCP Value: {tcpValue.data}</p> */}
         <p>TCP Trans Time: {tcpValue.transferTime}</p>
