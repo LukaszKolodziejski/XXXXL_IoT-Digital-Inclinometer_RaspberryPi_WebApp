@@ -3,16 +3,16 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "./axios-api";
 import openSocket from "socket.io-client";
 import mqtt from "mqtt";
+import { CLIENT_ID, CONNECT_URL, TOPIC, OPTIONS } from "./constants/constants";
 
-const clientId = `mqtt_${Math.random().toString(16).slice(3)}`;
-const connectUrl = `ws://broker.hivemq.com:8000/mqtt`;
-const topic = "mqtt/inclinometer/data";
-const options = {
-  transports: ["websocket", "polling", "flashsocket"],
-};
 const initData = {
   data: null,
   transferTime: 0,
+  angle: {
+    X: 0,
+    Y: 0,
+    Z: 0,
+  },
 };
 
 const App = () => {
@@ -42,7 +42,17 @@ const App = () => {
         // console.log("transferTime");
         // console.log(transferTime);
 
-        return { data, transferTime };
+        //TODO: raw data -> angle X Y Z
+        const angle = {
+          X: 0,
+          Y: 0,
+          Z: 0,
+        };
+        return {
+          data,
+          angle,
+          transferTime,
+        };
       }
     },
     [syncTimeRef]
@@ -76,7 +86,7 @@ const App = () => {
 
   useEffect(() => {
     // Websocket
-    const socket = openSocket("http://192.168.1.131:8080/", options);
+    const socket = openSocket("http://192.168.1.131:8080/", OPTIONS);
 
     timeSynchronizationHandler(socket);
 
@@ -85,7 +95,7 @@ const App = () => {
     });
 
     // MQTT
-    setClient(mqtt.connect(connectUrl, { clientId }));
+    setClient(mqtt.connect(CONNECT_URL, { CLIENT_ID }));
 
     // HTTP
     setInterval(() => {
@@ -101,14 +111,14 @@ const App = () => {
     }, 20);
 
     // TCP
-    const socketTcp = openSocket("ws://192.168.1.131:1338/", options);
+    const socketTcp = openSocket("ws://192.168.1.131:1338/", OPTIONS);
     socketTcp.on("serverDataTCP", ({ buffer }) => {
       const receivedData = bufferToReceivedDataHandler("tcp", buffer);
       if (receivedData) setTcpValue(receivedData);
     });
 
     // UDP
-    const socketUdp = openSocket("ws://192.168.1.131:5050/", options);
+    const socketUdp = openSocket("ws://192.168.1.131:5050/", OPTIONS);
     socketUdp.on("serverDataUDP", ({ buffer }) => {
       const receivedData = bufferToReceivedDataHandler("udp", buffer);
       if (receivedData) setUdpValue(receivedData);
@@ -118,7 +128,7 @@ const App = () => {
   useEffect(() => {
     if (client) {
       client.on("connect", () => {
-        client.subscribe(topic, () => console.log(`Subscribe: '${topic}'`));
+        client.subscribe(TOPIC, () => console.log(`Subscribe: '${TOPIC}'`));
         setConnectStatus("Connected");
       });
       client.on("error", (err) => {
@@ -127,9 +137,9 @@ const App = () => {
       });
       client.on("reconnect", () => setConnectStatus("Reconnecting"));
 
-      client.on("message", (topic, message) => {
+      client.on("message", (TOPIC, message) => {
         const payload = {
-          topic,
+          TOPIC,
           message: bufferToReceivedDataHandler("mqtt", message),
         };
         // console.log(payload);
@@ -154,7 +164,7 @@ const App = () => {
         <p>UDP Trans Time: {udpValue.transferTime}</p>
         <p>------------------</p>
         {/* <p>Http Value: {httpValue.data}</p> */}
-        <p>Http Trans Time: {httpValue.transferTime}ms</p>
+        <p>Http Trans Time: {httpValue.transferTime}</p>
         {/* <p>
           connectionStatus: {connectStatus ? connectStatus.toString() : "n/n"}
         </p> */}
