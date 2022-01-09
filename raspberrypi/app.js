@@ -19,25 +19,30 @@ const rawDataHandler = (data) => {
 };
 
 const sendRawData = (data) => {
-  //TODO: rawData -> data
-  // HTTP || transferTime => OK
+  // HTTP
   Http.setRawData(rawDataHandler(data));
-  // Websocket || transferTime => OK
+
+  // Websocket
   Socket.getIO().emit("serverData", {
     action: "create",
     rawData: rawDataHandler(data),
   });
-  // Socket.getIO().emit("serverData", { action: "create", rawData });
-  // // MQTT
-  // Mqtt.getClient().publish(topic, rawData, { qos: 0, retain: false });
-  // TCP || transferTime => OK
+
+  // MQTT
+  Mqtt.getClient().publish(topic, JSON.stringify(rawDataHandler(data)), {
+    qos: 0,
+    retain: false,
+  });
+
+  // TCP
   Tcp.getSocket().write(Buffer.from(JSON.stringify(rawDataHandler(data))));
-  // // UDP
-  // Udp.getSocket().send(rawData);
+
+  // UDP
+  Udp.getSocket().send(Buffer.from(JSON.stringify(rawDataHandler(data))));
 };
 
-const timeSynchronizationHandler = () => {
-  const start = new Date().getTime() + 10;
+const timeSynchronization = () => {
+  const start = new Date().getTime() + 5;
   Socket.getIO().emit("syncTime", { action: "sync", start });
 };
 
@@ -60,7 +65,7 @@ const main = () => {
   initProtocols();
 
   setInterval(() => {
-    timeSynchronizationHandler();
+    timeSynchronization();
     for (let i = 0; i < loop; i++) {
       setTimeout(() => {
         start = new Date().getTime();
