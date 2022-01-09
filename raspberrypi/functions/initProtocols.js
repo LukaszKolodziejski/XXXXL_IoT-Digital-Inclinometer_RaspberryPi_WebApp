@@ -15,8 +15,8 @@ const initProtocols = () => {
     console.log("Client connected");
   });
 
-  // // // MQTT
-  // Mqtt.init(connectUrl, { clientId });
+  // MQTT
+  Mqtt.init(connectUrl, { clientId });
 
   // TCP
   Tcp.init(1337);

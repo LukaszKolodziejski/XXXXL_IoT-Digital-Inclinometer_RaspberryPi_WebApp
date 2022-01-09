@@ -21,17 +21,24 @@ const rawDataHandler = (data) => {
 const sendRawData = (data) => {
   //TODO: rawData -> data
   // HTTP || transferTime => OK
-  Http.setRawData(rawDataHandler(data));
+  // Http.setRawData(rawDataHandler(data));
   // Websocket || transferTime => OK
-  Socket.getIO().emit("serverData", {
-    action: "create",
-    rawData: rawDataHandler(data),
-  });
-  // Socket.getIO().emit("serverData", { action: "create", rawData });
-  // // MQTT
-  // Mqtt.getClient().publish(topic, rawData, { qos: 0, retain: false });
+  // Socket.getIO().emit("serverData", {
+  //   action: "create",
+  //   rawData: rawDataHandler(data),
+  // });
+  // // Socket.getIO().emit("serverData", { action: "create", rawData });
+  // MQTT
+  Mqtt.getClient().publish(
+    topic,
+    // { rawData: rawDataHandler(data) },
+    // { rawData },
+    // { data },
+    JSON.stringify(rawDataHandler(data)),
+    { qos: 0, retain: false }
+  );
   // TCP || transferTime => OK
-  Tcp.getSocket().write(Buffer.from(JSON.stringify(rawDataHandler(data))));
+  // Tcp.getSocket().write(Buffer.from(JSON.stringify(rawDataHandler(data))));
   // // UDP
   // Udp.getSocket().send(rawData);
 };
