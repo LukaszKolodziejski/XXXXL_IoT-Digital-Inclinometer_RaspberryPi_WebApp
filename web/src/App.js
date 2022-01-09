@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from "./axios-api";
 import openSocket from "socket.io-client";
 import mqtt from "mqtt";
@@ -10,86 +10,147 @@ const topic = "mqtt/inclinometer/data";
 const options = {
   transports: ["websocket", "polling", "flashsocket"],
 };
+const initData = {
+  data: null,
+  transferTime: 0,
+};
 
 const App = () => {
   const [client, setClient] = useState(null);
   const [connectStatus, setConnectStatus] = useState(null);
-  const [mqttValue, setMqttValue] = useState("nothing");
+  const [mqttValue, setMqttValue] = useState(initData); //TODO: everything
+  const [udpValue, setUdpValue] = useState(initData); //TODO: everything
 
-  const [socketValue, setSocketValue] = useState("nothing");
-  const [httpValue, setHttpValue] = useState("nothing");
-  const [tcpValue, setTcpValue] = useState("nothing");
-  const [udpValue, setUdpValue] = useState("nothing");
+  const [tcpValue, setTcpValue] = useState(initData);
+  const [socketValue, setSocketValue] = useState(initData);
+  const [httpValue, setHttpValue] = useState(initData);
+  const [err, setErr] = useState(null);
+
+  const [syncTime, setSyncTime] = useState(0);
+  const syncTimeRef = useRef();
 
   useEffect(() => {
-    // Websocket
+    syncTimeRef.current = syncTime;
+  });
+
+  const receivedDataHandler = useCallback(
+    (proof) => {
+      if (proof.rawData) {
+        const { data, startTime } = proof.rawData;
+        const endTime = new Date().getTime();
+        const transferTime = endTime - startTime - syncTimeRef.current;
+        // console.log("transferTime");
+        // console.log(transferTime);
+
+        return { data, transferTime };
+      }
+    },
+    [syncTimeRef]
+  );
+
+  const bufferToReceivedDataHandler = (buffer) => {
+    const view = new Uint8Array(buffer);
+    const stringData = new TextDecoder().decode(view);
+    try {
+      const rawData = JSON.parse(stringData);
+      return receivedDataHandler({ rawData });
+    } catch (e) {
+      setErr(e);
+      return null;
+    }
+  };
+
+  const timeSynchronizationHandler = (socket) => {
+    socket.on("syncTime", (data) => {
+      if (data.action === "sync") {
+        const end = new Date().getTime();
+        setSyncTime(end - data.start);
+      }
+    });
+  };
+
+  useEffect(() => {
+    // Websocket || transferTime => OK
     const socket = openSocket("http://192.168.1.131:8080/", options);
+
+    timeSynchronizationHandler(socket);
+
     socket.on("serverData", (data) => {
-      if (data.action === "create") setSocketValue(data.rawData);
+      if (data.action === "create") setSocketValue(receivedDataHandler(data));
     });
 
-    // MQTT
-    setClient(mqtt.connect(connectUrl, { clientId }));
+    // // MQTT
+    // setClient(mqtt.connect(connectUrl, { clientId }));
 
-    // HTTP
+    // HTTP || transferTime => OK
     setInterval(() => {
       axios
         .get("/http-data")
         .then((res) => {
           if (res) {
-            setHttpValue(res.data.rawData);
-            // console.log("http-data res");
-            // console.log(res.data.rawData);
+            setHttpValue(receivedDataHandler(res.data));
           }
         })
-        .catch((err) => console.log(err));
-    }, 100);
-    //   // }, 5.25);
+        // .catch((err) => console.log(err));
+        .catch((err) => setErr(err));
+      // }, 5.25);
+    }, 20);
 
-    // TCP
+    // TCP || transferTime => OK
     const socketTcp = openSocket("ws://192.168.1.131:1338/", options);
-    socketTcp.on("serverDataTCP", (data) => {
-      if (data.action === "create") setTcpValue(data.rawData);
+    socketTcp.on("serverDataTCP", ({ buffer }) => {
+      const receivedData = bufferToReceivedDataHandler(buffer);
+      if (receivedData) setTcpValue(receivedData);
     });
 
-    // UDP
-    const socketUdp = openSocket("ws://192.168.1.131:5050/", options);
-    socketUdp.on("serverDataUDP", (data) => {
-      if (data.action === "create") setUdpValue(data.rawData);
-    });
+    // // UDP
+    // const socketUdp = openSocket("ws://192.168.1.131:5050/", options);
+    // socketUdp.on("serverDataUDP", (data) => {
+    //   if (data.action === "create") setUdpValue(data.rawData);
+    // });
+    // }, [syncTime]);
   }, []);
 
-  useEffect(() => {
-    if (client) {
-      client.on("connect", () => {
-        client.subscribe(topic, () => console.log(`Subscribe: '${topic}'`));
-        setConnectStatus("Connected");
-      });
-      client.on("error", (err) => {
-        console.error(`Connection error: ${err}`);
-        client.end();
-      });
-      client.on("reconnect", () => setConnectStatus("Reconnecting"));
+  // useEffect(() => {
+  //   if (client) {
+  //     client.on("connect", () => {
+  //       client.subscribe(topic, () => console.log(`Subscribe: '${topic}'`));
+  //       setConnectStatus("Connected");
+  //     });
+  //     client.on("error", (err) => {
+  //       console.error(`Connection error: ${err}`);
+  //       client.end();
+  //     });
+  //     client.on("reconnect", () => setConnectStatus("Reconnecting"));
 
-      client.on("message", (topic, message) => {
-        const payload = { topic, message: message.toString() };
-        // console.log(payload);
-        setMqttValue(payload.message);
-      });
-    }
-  }, [client]);
+  //     client.on("message", (topic, message) => {
+  //       const payload = { topic, message: message.toString() };
+  //       // console.log(payload);
+  //       setMqttValue(payload.message);
+  //     });
+  //   }
+  // }, [client]);
 
   return (
     <div className="App">
       <header className="App-header">
-        <p>Socket Value: {socketValue}</p>
-        <p>MQTT Value: {mqttValue}</p>
-        <p>TCP Value: {tcpValue}</p>
-        <p>UDP Value: {udpValue}</p>
-        <p>Http Value: {httpValue}</p>
-        <p>
+        {/* <p>Socket Value: {socketValue.data}</p> */}
+        <p>Socket Trans Time: {socketValue.transferTime}</p>
+        {/* <p>------------------</p>
+        <p>MQTT Value: {mqttValue.data}</p>
+        <p>MQTT Trans Time: {mqttValue.transferTime}</p> */}
+        <p>------------------</p>
+        {/* <p>TCP Value: {tcpValue.data}</p> */}
+        <p>TCP Trans Time: {tcpValue.transferTime}</p>
+        {/* <p>------------------</p>
+        <p>UDP Value: {udpValue.data}</p>
+        <p>UDP Trans Time: {udpValue.transferTime}</p> */}
+        <p>------------------</p>
+        {/* <p>Http Value: {httpValue.data}</p> */}
+        <p>Http Trans Time: {httpValue.transferTime}ms</p>
+        {/* <p>
           connectionStatus: {connectStatus ? connectStatus.toString() : "n/n"}
-        </p>
+        </p> */}
       </header>
     </div>
   );
