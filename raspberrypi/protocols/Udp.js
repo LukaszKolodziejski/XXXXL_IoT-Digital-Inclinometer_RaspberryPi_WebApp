@@ -10,11 +10,10 @@ export default {
     socketPort = port;
     let streamUdp;
 
-    server.on("data", (msg, client, protocol) => {
-      console.log("rx: " + msg);
+    server.on("data", (buffer, client, protocol) => {
       streamUdp.emit("serverDataUDP", {
         action: "create",
-        rawData: `${msg}`,
+        buffer,
       });
     });
 
