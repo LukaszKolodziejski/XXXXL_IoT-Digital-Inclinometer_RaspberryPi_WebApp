@@ -1,0 +1,14 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.Content {
+  display: block;
+  margin-top: 7.5vh;
+  overflow: auto;
+  background-color: #f2f3f6;
+  height: 92.5vh;
+  /* height: 100%; */
+}

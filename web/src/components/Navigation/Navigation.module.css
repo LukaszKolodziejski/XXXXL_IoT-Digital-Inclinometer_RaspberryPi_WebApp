@@ -1,0 +1,70 @@
+.Navigation {
+  /* height: 56px; */
+  height: 7.5vh;
+  width: 100%;
+  background-color: #703b09;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0 20px 0 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.Navigation nav {
+  height: 100%;
+}
+
+@media (max-width: 499px) {
+  .DeskopOnly {
+    display: none;
+  }
+}
+
+.NavigationItems {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: column;
+  flex-flow: column;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 100%;
+}
+
+@media (min-width: 500px) {
+  .NavigationItems {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row;
+    flex-flow: row;
+  }
+}
+
+.Logout a {
+  /* font-size: 30px; */
+  font-size: 20px;
+  font-weight: bold;
+  color: #c2bebe;
+  text-decoration: none;
+}
+/*# sourceMappingURL=Navigation.module.css.map */

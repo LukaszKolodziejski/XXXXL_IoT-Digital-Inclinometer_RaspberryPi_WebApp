@@ -1,0 +1,23 @@
+.Options {
+  background-color: #8989a4;
+  display: block;
+  width: 80%;
+  height: auto;
+  margin: 40vh auto auto auto;
+  border-radius: 15px;
+  padding: 5px;
+}
+
+.Options div {
+  border-bottom: 2px solid #8989a4;
+}
+
+.Options div:first-child {
+  border-radius: 10px 10px 0px 0px;
+}
+
+.Options div:last-child {
+  border-radius: 0px 0px 10px 10px;
+  border-bottom: 0px solid #000;
+}
+/*# sourceMappingURL=Options.module.css.map */

@@ -1,0 +1,33 @@
+.OptionsItem {
+  //   display: block;
+  //   margin: auto;
+  //   float: left;
+  //   float: right;
+
+  //   display: block;
+
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+
+  height: 40px;
+  //   width: 50px;
+  // background-color: rgb(222, 233, 21);
+  font-weight: bold;
+  //   color: rgb(95, 94, 94);
+  color: rgb(211, 37, 37);
+  background-color: rgb(222, 222, 225);
+  transition: 0.2s;
+  &:hover {
+    cursor: pointer;
+    background-color: rgb(202, 202, 204);
+  }
+}
+.Active {
+  transition: 1;
+  background-color: rgb(213, 213, 216);
+  //   background-color: rgb(164, 155, 144);
+  //   color: rgb(9, 29, 247);
+  color: rgb(6, 152, 48);
+}
