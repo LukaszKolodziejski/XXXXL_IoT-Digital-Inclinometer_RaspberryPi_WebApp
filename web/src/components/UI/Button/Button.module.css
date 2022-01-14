@@ -1,0 +1,41 @@
+.Button {
+  width: 100px;
+  background-color: transparent;
+  border: none;
+  color: white;
+  outline: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 5px 10px;
+  font-weight: bold;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.Button:hover {
+  background-color: #e2dfdf;
+}
+
+.Button:first-of-type {
+  margin-left: 100px;
+}
+
+.Success {
+  color: #5c9210;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  border: 2px solid #5c9210;
+  border-radius: 15px;
+}
+
+.Success:disabled {
+  color: #484a45;
+  cursor: not-allowed;
+}
+
+.Danger {
+  color: #944317;
+  border: 2px solid #944317;
+  border-radius: 15px;
+}
+/*# sourceMappingURL=Button.module.css.map */
