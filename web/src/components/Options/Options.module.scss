@@ -3,10 +3,12 @@
   //   margin: 30% auto;
   display: block;
   width: 80%;
+  width: 70%;
   height: auto;
   //   margin: 50% auto 20px auto;
   //   margin: 100% auto auto auto;
   margin: 40vh auto auto auto;
+  margin: 53vh auto auto auto;
   //   margin: 100% auto 100% auto;
   border-radius: 15px;
   padding: 5px;
@@ -18,15 +20,13 @@
   //   align-items: center;
   //   justify-content: center;
 
-  & div {
+  & span {
     border-bottom: 2px solid rgb(137, 137, 164);
 
     &:first-child {
       border-radius: 10px 10px 0px 0px;
-      //   background-color: rgb(222, 233, 21);
     }
     &:last-child {
-      //   background-color: rgb(222, 233, 21);
       border-radius: 0px 0px 10px 10px;
       border-bottom: 0px solid #000;
     }
