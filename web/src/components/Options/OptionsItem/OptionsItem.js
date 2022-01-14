@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./OptionsItem.module.css";
+import Status from "../../Status/Status";
 
 const OptionsItem = (props) => {
   const [active, setActive] = useState(false);
@@ -13,9 +14,10 @@ const OptionsItem = (props) => {
   const style = [styles.OptionsItem, active ? styles.Active : null].join(" ");
 
   return (
-    <div className={style} onClick={() => getValueHandler(text, active)}>
-      {text}
-    </div>
+    <span className={style} onClick={() => getValueHandler(text, active)}>
+      {active ? <Status /> : null}
+      <span>Axis {text}</span>
+    </span>
   );
 };
 
