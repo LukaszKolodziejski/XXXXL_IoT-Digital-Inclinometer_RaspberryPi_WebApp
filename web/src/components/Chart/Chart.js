@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -11,114 +11,95 @@ import {
   AreaChart,
   Area,
 } from "recharts";
+import ChartSamples from "./ChartSamples/ChartSamples";
 import Button from "../UI/Button/Button";
 import styles from "./Chart.module.css";
+import { STROKE } from "../../constants/colors";
+import { renderDot, getAxisTime } from "../../functions/functions";
 
-const data = [
-  { time: 5, x: 20, y: 24, z: 24 },
-  { time: 5, x: 30, y: 45, z: 24 },
-  { time: 5, x: 28, y: 13, z: 24 },
-  { time: 5, x: 20, y: 98, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: -18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 20, y: 24, z: 24 },
-  { time: 5, x: 30, y: 45, z: 24 },
-  { time: 5, x: 20, y: 24, z: 24 },
-  { time: 5, x: 30, y: 45, z: 24 },
-  { time: 5, x: 28, y: 13, z: 24 },
-  { time: 5, x: 20, y: 98, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: -18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 20, y: 24, z: 24 },
-  { time: 5, x: 30, y: 45, z: 24 },
-  { time: 5, x: 20, y: 24, z: 24 },
-  { time: 5, x: 30, y: 45, z: 24 },
-  { time: 5, x: 28, y: 13, z: 24 },
-  { time: 5, x: 20, y: 98, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: -18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 20, y: 24, z: 24 },
-  { time: 5, x: 30, y: 45, z: 24 },
-  { time: 5, x: 20, y: 24, z: 24 },
-  { time: 5, x: 30, y: 45, z: 24 },
-  { time: 5, x: 28, y: 13, z: 24 },
-  { time: 5, x: 20, y: 98, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: -18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 20, y: 24, z: 24 },
-  { time: 5, x: 30, y: 45, z: 24 },
-  { time: 5, x: 20, y: 24, z: 24 },
-  { time: 5, x: 30, y: 45, z: 24 },
-  { time: 5, x: 28, y: 13, z: 24 },
-  { time: 5, x: 20, y: 98, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: -18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 18, y: 48, z: 24 },
-  { time: 5, x: 20, y: 24, z: 24 },
-  { time: 5, x: 30, y: 45, z: 24 },
-];
-
-const initialState = {
-  data,
-  opacity: 1,
-  anotherState: false,
-};
-
-const renderDot = (props) => {
-  const { cx, cy, stroke, key } = props;
-  if (cx === +cx && cy === +cy) {
-    return <path d={`M${cx - 2},${cy - 2}h4v4h-4Z`} fill={stroke} key={key} />;
-  } else return null;
-};
-
-const Chart = (props) => {
-  const [data, setData] = useState(initialState.data);
-  const [intervalFn, setIntervalFn] = useState(null);
+const Chart = React.memo((props) => {
+  const [chartData, setChartData] = useState([]);
+  const [intervalClock, setIntervalClock] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
   const [isOptionActived, setIsOptionActived] = useState(false);
-
+  const [chartLength, setChartLength] = useState(600);
+  const [varChartLength, setVarChartLength] = useState(600);
+  const [angleX, setAngleX] = useState(0);
+  const [angleY, setAngleY] = useState(0);
+  const [angleZ, setAngleZ] = useState(0);
   const { options } = props;
 
-  const math = () => Math.floor(Math.random() * 800) / 10;
+  const angleXRef = useRef();
+  const angleYRef = useRef();
+  const angleZRef = useRef();
+  const chartLengthRef = useRef();
+  const chartVarLengthRef = useRef();
 
-  const intervalFnData = () => {
-    const sec = new Date().getSeconds();
-    const ms = new Date().getMilliseconds();
-    const time = `${sec}.${Math.floor(ms / 100)}`;
-    const newData = { time, x: math(), y: 48, z: 24 };
-    if (!isPaused) setData((prevData) => [...prevData, newData]);
+  useEffect(() => {
+    angleXRef.current = angleX;
+    angleYRef.current = angleY;
+    angleZRef.current = angleZ;
+    chartLengthRef.current = chartLength;
+    chartVarLengthRef.current = varChartLength;
+  });
+
+  const dataSamplesHandler = (x, y, z) => {
+    setAngleX(x);
+    setAngleY(y);
+    setAngleZ(z);
   };
+
+  const chartDataHandler = useCallback(() => {
+    if (!isPaused) {
+      const x = angleXRef.current;
+      const y = angleYRef.current;
+      const z = angleZRef.current;
+      const chartLen = chartLengthRef.current;
+      const chartVarLen = chartVarLengthRef.current;
+
+      const newData = { time: getAxisTime(), x, y, z };
+
+      setChartData((prevData) => {
+        if (prevData && prevData.length > chartLen) {
+          const copyData = [...prevData];
+
+          const length = chartVarLen - chartLen;
+          if (length > 0) {
+            for (let i = 0; i <= length; i++) copyData.shift();
+          }
+          copyData.shift();
+          copyData.shift();
+          return [...copyData, newData];
+        }
+        return [...prevData, newData];
+      });
+      setVarChartLength(chartLen);
+    }
+  }, [angleXRef, angleYRef, angleZRef, isPaused]);
+
   const pauseHandler = () => {
     setIsPaused((prev) => !prev);
-    clearInterval(intervalFn);
+    clearInterval(intervalClock);
   };
 
   useEffect(() => {
     if (isOptionActived) {
-      const interval = setInterval(intervalFnData, 5);
-      setIntervalFn(interval);
+      const interval = setInterval(chartDataHandler, 5);
+      setIntervalClock(interval);
     } else {
-      clearInterval(intervalFn);
+      clearInterval(intervalClock);
     }
   }, [isPaused, isOptionActived]);
 
   useEffect(() => {
     const optionsActiveStatus = options.find((opt) => opt.active === true);
     setIsOptionActived(optionsActiveStatus ? true : false);
+
+    const countActiveStatus = options.filter(
+      (opt) => opt.active === true
+    ).length;
+    const length = (6 - countActiveStatus) * 100;
+    setChartLength(length);
   }, [options]);
 
   const lines = options.map((opt) =>
@@ -127,7 +108,7 @@ const Chart = (props) => {
         key={opt.text}
         dataKey={opt.text.toLowerCase()}
         name={`Axis ${opt.text}`}
-        stroke="#ff7300" //TODO: change colors
+        stroke={STROKE[`${opt.text}`]}
         strokeWidth={2}
         yAxisId={0}
         dot={renderDot}
@@ -135,35 +116,50 @@ const Chart = (props) => {
     ) : null
   );
 
+  const areas = options.map((opt) =>
+    opt.active ? (
+      <Area
+        key={opt.text}
+        dataKey={opt.text.toLowerCase()}
+        stroke={STROKE[`${opt.text}`]}
+        fill={STROKE[`${opt.text}`]}
+      />
+    ) : null
+  );
+
   return (
     <div className={styles.Chart}>
-      <div className={styles.ChartWrapper} style={{ margin: 40 }}>
-        <LineChart width={750} height={500} data={data}>
-          <YAxis type="number" yAxisId={0} domain={[0, 90]} />
-          <XAxis dataKey="time" name="Time" />
-          <Tooltip position={{ y: 200 }} />
-          <CartesianGrid stroke="#f5f5f5" />
-          {lines}
-          <Brush dataKey="time" startIndex={data.length - 40}>
-            <AreaChart>
-              <CartesianGrid />
-              <Area dataKey="x" stroke="#ff7300" fill="#ff7300" />
-              <Area dataKey="y" stroke="#f7f300" fill="#f7f300" />
-              <Area dataKey="z" stroke="#ff73f0" fill="#ff73f0" />
-            </AreaChart>
-          </Brush>
-        </LineChart>
-      </div>
-      {isOptionActived ? (
-        <Button
-          btnType={isPaused ? "Success" : "Danger"}
-          clicked={pauseHandler}
-        >
-          {!isPaused ? "Pause" : "Go on !!!"}
-        </Button>
+      {chartData && chartData.length >= 80 ? (
+        <div className={styles.ChartWrapper} style={{ margin: 40 }}>
+          <LineChart width={750} height={500} data={chartData}>
+            <YAxis type="number" yAxisId={0} domain={[0, 90]} />
+            <XAxis dataKey="time" name="Time" />
+            <Tooltip position={{ y: 200 }} />
+            <CartesianGrid stroke="#f5f5f5" />
+            {lines}
+            <Brush dataKey="time" startIndex={chartData.length - 80}>
+              <AreaChart>
+                <CartesianGrid />
+                {areas}
+              </AreaChart>
+            </Brush>
+          </LineChart>
+          <Button btnType={"Success"} clicked={() => setChartData([])}>
+            {`Clear: ${chartData.length}`}
+          </Button>
+          {isOptionActived ? (
+            <Button
+              btnType={isPaused ? "Success" : "Danger"}
+              clicked={pauseHandler}
+            >
+              {!isPaused ? "Pause" : "Go on !!!"}
+            </Button>
+          ) : null}
+        </div>
       ) : null}
+      <ChartSamples onGetDataSamples={dataSamplesHandler} />
     </div>
   );
-};
+});
 
 export default Chart;

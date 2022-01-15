@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./OptionsItem.module.css";
 import Status from "../../Status/Status";
 
-const OptionsItem = (props) => {
+const OptionsItem = React.memo((props) => {
   const [active, setActive] = useState(false);
   const { text, onValue } = props;
 
@@ -19,6 +19,6 @@ const OptionsItem = (props) => {
       <span>Axis {text}</span>
     </span>
   );
-};
+});
 
 export default OptionsItem;
