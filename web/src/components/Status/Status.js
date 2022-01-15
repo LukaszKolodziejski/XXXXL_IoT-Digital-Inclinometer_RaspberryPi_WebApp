@@ -32,6 +32,7 @@ const Status = React.memo((props) => {
       delay,
     });
   }, []);
+
   return (
     <div className={styles.RingContainer}>
       <div ref={wrapperRing} className={styles.Ringring}></div>
