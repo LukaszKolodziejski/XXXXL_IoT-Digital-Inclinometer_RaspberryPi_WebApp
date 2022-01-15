@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Options.module.css";
 import OptionsItem from "./OptionsItem/OptionsItem";
 
-const Options = (props) => {
+const Options = React.memo((props) => {
   return (
     <div className={styles.Options}>
       {props.values.map((value) => {
@@ -10,6 +10,6 @@ const Options = (props) => {
       })}
     </div>
   );
-};
+});
 
 export default Options;
