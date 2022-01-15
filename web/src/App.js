@@ -5,7 +5,7 @@ import Layout from "./hoc/Layout/Layout";
 import axios from "./axios-api";
 import openSocket from "socket.io-client";
 import mqtt from "mqtt";
-import { CLIENT_ID, CONNECT_URL, TOPIC, OPTIONS } from "./constants/constants";
+import { CLIENT_ID, CONNECT_URL, TOPIC, OPTIONS } from "./constants/protocols";
 import Orientation from "./containers/Orientation/Orientation";
 
 const initData = {
@@ -19,18 +19,18 @@ const initData = {
 };
 
 const App = () => {
-  // const [client, setClient] = useState(null);
-  // const [connectStatus, setConnectStatus] = useState(null);
-  // const [mqttValue, setMqttValue] = useState(initData);
-  // const [udpValue, setUdpValue] = useState(initData);
+  const [client, setClient] = useState(null);
+  const [connectStatus, setConnectStatus] = useState(null);
+  const [mqttValue, setMqttValue] = useState(initData);
+  const [udpValue, setUdpValue] = useState(initData);
 
-  // const [tcpValue, setTcpValue] = useState(initData);
-  // const [socketValue, setSocketValue] = useState(initData);
-  // const [httpValue, setHttpValue] = useState(initData);
-  // const [err, setErr] = useState(null);
+  const [tcpValue, setTcpValue] = useState(initData);
+  const [socketValue, setSocketValue] = useState(initData);
+  const [httpValue, setHttpValue] = useState(initData);
+  const [err, setErr] = useState(null);
 
-  // const [syncTime, setSyncTime] = useState(0);
-  // const syncTimeRef = useRef();
+  const [syncTime, setSyncTime] = useState(0);
+  const syncTimeRef = useRef();
 
   // useEffect(() => {
   //   syncTimeRef.current = syncTime;
@@ -45,12 +45,24 @@ const App = () => {
   //       // console.log("transferTime");
   //       // console.log(transferTime);
 
+  //       const x = data.accel["x"];
+  //       const y = data.accel["y"];
+  //       const z = data.accel["z"];
+
+  //       const angle_x =
+  //         Math.atan2(x, Math.sqrt(y * y + z * z)) / (Math.PI / 180);
+  //       const angle_y =
+  //         Math.atan2(y, Math.sqrt(x * x + z * z)) / (Math.PI / 180);
+  //       const angle_z =
+  //         Math.atan2(z, Math.sqrt(x * x + y * y)) / (Math.PI / 180);
+
   //       //TODO: raw data -> angle X Y Z
   //       const angle = {
-  //         X: 0,
-  //         Y: 0,
-  //         Z: 0,
+  //         X: angle_x,
+  //         Y: angle_y,
+  //         Z: angle_z,
   //       };
+  //       // console.log(angle);
   //       return {
   //         data,
   //         angle,
@@ -86,47 +98,41 @@ const App = () => {
   //     }
   //   });
   // };
-  // //TODO: raspberry -> constants/ Z dużej litery
-  // useEffect(() => {
-  //   // Websocket
-  //   const socket = openSocket("http://192.168.1.131:8080/", OPTIONS);
 
-  //   timeSynchronizationHandler(socket);
-
-  //   socket.on("serverData", (data) => {
-  //     if (data.action === "create") setSocketValue(receivedDataHandler(data));
-  //   });
-
-  //   // MQTT
-  //   setClient(mqtt.connect(CONNECT_URL, { CLIENT_ID }));
-
-  //   // HTTP
-  //   setInterval(() => {
-  //     axios
-  //       .get("/http-data")
-  //       .then((res) => {
-  //         if (res) {
-  //           setHttpValue(receivedDataHandler(res.data));
-  //         }
-  //       })
-  //       // .catch((err) => console.log(err));
-  //       .catch((err) => setErr(err));
-  //   }, 20);
-
-  //   // TCP
-  //   const socketTcp = openSocket("ws://192.168.1.131:1338/", OPTIONS);
-  //   socketTcp.on("serverDataTCP", ({ buffer }) => {
-  //     const receivedData = bufferToReceivedDataHandler("tcp", buffer);
-  //     if (receivedData) setTcpValue(receivedData);
-  //   });
-
-  //   // UDP
-  //   const socketUdp = openSocket("ws://192.168.1.131:5050/", OPTIONS);
-  //   socketUdp.on("serverDataUDP", ({ buffer }) => {
-  //     const receivedData = bufferToReceivedDataHandler("udp", buffer);
-  //     if (receivedData) setUdpValue(receivedData);
-  //   });
-  // }, []);
+  useEffect(() => {
+    // // Websocket
+    // const socket = openSocket("http://192.168.1.131:8080/", OPTIONS);
+    // timeSynchronizationHandler(socket);
+    // socket.on("serverData", (data) => {
+    //   if (data.action === "create") setSocketValue(receivedDataHandler(data));
+    // });
+    // // MQTT
+    // setClient(mqtt.connect(CONNECT_URL, { CLIENT_ID }));
+    // // HTTP
+    // setInterval(() => {
+    //   axios
+    //     .get("/http-data")
+    //     .then((res) => {
+    //       if (res) {
+    //         setHttpValue(receivedDataHandler(res.data));
+    //       }
+    //     })
+    //     // .catch((err) => console.log(err));
+    //     .catch((err) => setErr(err));
+    // }, 20);
+    // // TCP
+    // const socketTcp = openSocket("ws://192.168.1.131:1338/", OPTIONS);
+    // socketTcp.on("serverDataTCP", ({ buffer }) => {
+    //   const receivedData = bufferToReceivedDataHandler("tcp", buffer);
+    //   if (receivedData) setTcpValue(receivedData);
+    // });
+    // // UDP
+    // const socketUdp = openSocket("ws://192.168.1.131:5050/", OPTIONS);
+    // socketUdp.on("serverDataUDP", ({ buffer }) => {
+    //   const receivedData = bufferToReceivedDataHandler("udp", buffer);
+    //   if (receivedData) setUdpValue(receivedData);
+    // });
+  }, []);
 
   // useEffect(() => {
   //   if (client) {
