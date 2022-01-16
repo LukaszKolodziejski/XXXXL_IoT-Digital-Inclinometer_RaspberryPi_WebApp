@@ -3,7 +3,7 @@ import Mqtt from "../protocols/Mqtt";
 import Http from "../protocols/Http";
 import Tcp from "../protocols/Tcp";
 import Udp from "../protocols/Udp";
-import { connectUrl, clientId } from "../constants/mqtt";
+import { CONNECT_URL, clientId } from "../constants/mqtt";
 
 const initProtocols = () => {
   // Http
@@ -15,8 +15,11 @@ const initProtocols = () => {
     console.log("Client connected");
   });
 
+  // // // MQTT
+  // Mqtt.init(CONNECT_URL, { clientId: clientId() });
+
   // MQTT
-  Mqtt.init(connectUrl, { clientId });
+  Mqtt.init(CONNECT_URL);
 
   // TCP
   Tcp.init(1337);

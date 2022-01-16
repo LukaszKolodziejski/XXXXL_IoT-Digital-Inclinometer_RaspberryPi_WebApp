@@ -1,14 +1,20 @@
 import mqtt from "mqtt";
+import { TOPIC, clientId, sample } from "../constants/mqtt";
 
-let client;
+const client = [];
 
 export default {
-  init: (connectUrl, options) => {
-    client = mqtt.connect(connectUrl, options);
+  init: (connectUrl) => {
+    for (let k = 0; k <= 100; k++)
+      client.push(mqtt.connect(connectUrl, { clientId: clientId() }));
     return client;
   },
   getClient: () => {
-    if (!client) throw new Error("MQTT not initialized!");
-    return client;
+    const j = sample(100);
+    if (!client[j]) throw new Error("MQTT not initialized!");
+    return client[j];
+  },
+  getTopic: () => {
+    return TOPIC[sample(4)];
   },
 };
