@@ -110,8 +110,8 @@ const Orientation = React.memo((props) => {
 
   return (
     <div className={styles.Orientation}>
-      <Options values={NAMES} onClick={clickOptionItemHandler} />
-      <Chart options={options} />
+      <Options text="Axis" values={NAMES} onClick={clickOptionItemHandler} />
+      <Chart kind="orientation" options={options} />
       {/* <div></div> Suwak */}
     </div>
   );
