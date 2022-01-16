@@ -11,7 +11,7 @@ const Navigation = (props) => {
           <NavigationItem link="/" exact>
             ORIENTATION
           </NavigationItem>
-          <NavigationItem link="/shipping-technologies" exact>
+          <NavigationItem link="/shipping" exact>
             SHIPPING TECHNOLOGIES
           </NavigationItem>
           <NavigationItem link="/transfer-time" exact>
