@@ -3,13 +3,12 @@ import { Leds } from "node-sense-hat";
 import { IMU } from "./constants/IMU";
 import { ValueX, AxisX, AxisY } from "./models/Matrix";
 import { fillOutMatirx } from "./controllers/matrix";
-import { initProtocols } from "./functions/initProtocols";
+import { initProtocols } from "./controllers/initProtocols";
 import Socket from "./protocols/Socket";
 import Mqtt from "./protocols/Mqtt";
 import Http from "./protocols/Http";
 import Tcp from "./protocols/Tcp";
 import Udp from "./protocols/Udp";
-import { topic } from "./constants/mqtt";
 
 Leds.setRotation(180);
 
@@ -29,7 +28,9 @@ const sendRawData = (data) => {
   });
 
   // MQTT
-  Mqtt.getClient().publish(topic, JSON.stringify(rawDataHandler(data)), {
+  const TOPIC = Mqtt.getTopic();
+
+  Mqtt.getClient().publish(TOPIC, JSON.stringify(rawDataHandler(data)), {
     qos: 0,
     retain: false,
   });
