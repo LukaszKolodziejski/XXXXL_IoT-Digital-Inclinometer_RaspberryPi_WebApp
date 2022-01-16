@@ -7,6 +7,7 @@ import openSocket from "socket.io-client";
 import mqtt from "mqtt";
 import { CLIENT_ID, CONNECT_URL, TOPIC, OPTIONS } from "./constants/protocols";
 import Orientation from "./containers/Orientation/Orientation";
+import Shipping from "./containers/Shipping/Shipping";
 
 const initData = {
   data: null,
@@ -161,6 +162,7 @@ const App = () => {
     <Router>
       <Layout>
         <Route path="/" component={Orientation} exact />
+        <Route path="/shipping" component={Shipping} />
       </Layout>
     </Router>
   );
