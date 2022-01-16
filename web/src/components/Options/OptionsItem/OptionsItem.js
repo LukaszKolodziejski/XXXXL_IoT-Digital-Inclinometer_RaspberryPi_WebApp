@@ -4,7 +4,7 @@ import Status from "../../Status/Status";
 
 const OptionsItem = React.memo((props) => {
   const [active, setActive] = useState(false);
-  const { text, onValue } = props;
+  const { value, text, onValue } = props;
 
   const getValueHandler = (option, activeState) => {
     setActive((prev) => !prev);
@@ -14,9 +14,11 @@ const OptionsItem = React.memo((props) => {
   const style = [styles.OptionsItem, active ? styles.Active : null].join(" ");
 
   return (
-    <span className={style} onClick={() => getValueHandler(text, active)}>
+    <span className={style} onClick={() => getValueHandler(value, active)}>
       {active ? <Status /> : null}
-      <span>Axis {text}</span>
+      <span>
+        {text} {value}
+      </span>
     </span>
   );
 });

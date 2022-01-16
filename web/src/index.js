@@ -6,12 +6,14 @@ import App from "./App";
 import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import orientationReducer from "./store/reducers/orientation";
+import shippingReducer from "./store/reducers/shipping";
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = {
   orientation: orientationReducer,
+  shipping: shippingReducer,
 };
 
 const store = createStore(
