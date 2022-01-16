@@ -19,50 +19,100 @@ import { renderDot, getAxisTime } from "../../functions/functions";
 
 const Chart = React.memo((props) => {
   const [chartData, setChartData] = useState([]);
-  const [intervalClock, setIntervalClock] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [intervalClock, setIntervalClock] = useState(null);
   const [isOptionActived, setIsOptionActived] = useState(false);
   const [chartLength, setChartLength] = useState(600);
   const [varChartLength, setVarChartLength] = useState(600);
-  const [angleX, setAngleX] = useState(0);
-  const [angleY, setAngleY] = useState(0);
-  const [angleZ, setAngleZ] = useState(0);
+
+  const [socketAngleY, setSocketAngleY] = useState(0);
+  const [socketAngleZ, setSocketAngleZ] = useState(0);
+
+  const [socketAngleX, setSocketAngleX] = useState(0);
+  const [httpAngleX, setHttpAngleX] = useState(0);
+  const [mqttAngleX, setMqttAngleX] = useState(0);
+  const [tcpAngleX, setTcpAngleX] = useState(0);
+  const [udpAngleX, setUdpAngleX] = useState(0);
+
   const { options } = props;
 
-  const angleXRef = useRef();
-  const angleYRef = useRef();
-  const angleZRef = useRef();
+  const socketAngleXRef = useRef();
+  const socketAngleYRef = useRef();
+  const socketAngleZRef = useRef();
+
+  const httpAngleXRef = useRef();
+  const mqttAngleXRef = useRef();
+  const tcpAngleXRef = useRef();
+  const udpAngleXRef = useRef();
+
   const chartLengthRef = useRef();
   const chartVarLengthRef = useRef();
 
   useEffect(() => {
-    angleXRef.current = angleX;
-    angleYRef.current = angleY;
-    angleZRef.current = angleZ;
+    if (props.kind === "orientation") {
+      socketAngleXRef.current = socketAngleX;
+      socketAngleYRef.current = socketAngleY;
+      socketAngleZRef.current = socketAngleZ;
+    } else if (props.kind === "shipping") {
+      socketAngleXRef.current = socketAngleX;
+      httpAngleXRef.current = httpAngleX;
+      mqttAngleXRef.current = mqttAngleX;
+      tcpAngleXRef.current = tcpAngleX;
+      udpAngleXRef.current = udpAngleX;
+    }
     chartLengthRef.current = chartLength;
     chartVarLengthRef.current = varChartLength;
-  });
+  }, [
+    socketAngleX,
+    socketAngleY,
+    socketAngleZ,
+    socketAngleX,
+    httpAngleX,
+    mqttAngleX,
+    tcpAngleX,
+    udpAngleX,
+    chartLength,
+    varChartLength,
+  ]);
 
-  const dataSamplesHandler = (x, y, z) => {
-    setAngleX(x);
-    setAngleY(y);
-    setAngleZ(z);
+  // Orientation
+  const dataOrientationSamplesHandler = (x, y, z) => {
+    setSocketAngleX(x);
+    setSocketAngleY(y);
+    setSocketAngleZ(z);
+  };
+
+  // Shipping
+  const dataShippingSamplesHandler = (socketX, httpX, mqttX, tcpX, udpX) => {
+    setSocketAngleX(socketX);
+    setHttpAngleX(httpX);
+    setMqttAngleX(mqttX);
+    setTcpAngleX(tcpX);
+    setUdpAngleX(udpX);
   };
 
   const chartDataHandler = useCallback(() => {
     if (!isPaused) {
-      const x = angleXRef.current;
-      const y = angleYRef.current;
-      const z = angleZRef.current;
+      let newData;
+      if (props.kind === "orientation") {
+        const x = socketAngleXRef.current;
+        const y = socketAngleYRef.current;
+        const z = socketAngleZRef.current;
+        newData = { time: getAxisTime(), x, y, z };
+      } else if (props.kind === "shipping") {
+        const websocket = socketAngleXRef.current;
+        const http = httpAngleXRef.current;
+        const mqtt = mqttAngleXRef.current;
+        const tcp = tcpAngleXRef.current;
+        const udp = udpAngleXRef.current;
+        newData = { time: getAxisTime(), websocket, http, mqtt, tcp, udp };
+      }
       const chartLen = chartLengthRef.current;
       const chartVarLen = chartVarLengthRef.current;
 
-      const newData = { time: getAxisTime(), x, y, z };
-
       setChartData((prevData) => {
-        if (prevData && prevData.length > chartLen) {
+        if (prevData.length > chartLen) {
           const copyData = [...prevData];
-
           const length = chartVarLen - chartLen;
           if (length > 0) {
             for (let i = 0; i <= length; i++) copyData.shift();
@@ -75,7 +125,17 @@ const Chart = React.memo((props) => {
       });
       setVarChartLength(chartLen);
     }
-  }, [angleXRef, angleYRef, angleZRef, isPaused]);
+  }, [
+    socketAngleXRef,
+    socketAngleYRef,
+    socketAngleZRef,
+    socketAngleXRef,
+    httpAngleXRef,
+    mqttAngleXRef,
+    tcpAngleXRef,
+    udpAngleXRef,
+    isPaused,
+  ]);
 
   const pauseHandler = () => {
     setIsPaused((prev) => !prev);
@@ -98,16 +158,24 @@ const Chart = React.memo((props) => {
     const countActiveStatus = options.filter(
       (opt) => opt.active === true
     ).length;
-    const length = (6 - countActiveStatus) * 100;
+    const length = (6 - countActiveStatus) * 100; // TODO: work in Orientation
     setChartLength(length);
   }, [options]);
+
+  const lineNameHandler = (optionText) => {
+    if (props.kind === "orientation") {
+      return `Axis ${optionText}`;
+    } else if (props.kind === "shipping") {
+      return `${optionText}: X`;
+    }
+  };
 
   const lines = options.map((opt) =>
     opt.active ? (
       <Line
         key={opt.text}
         dataKey={opt.text.toLowerCase()}
-        name={`Axis ${opt.text}`}
+        name={lineNameHandler(opt.text)}
         stroke={STROKE[`${opt.text}`]}
         strokeWidth={2}
         yAxisId={0}
@@ -129,7 +197,7 @@ const Chart = React.memo((props) => {
 
   return (
     <div className={styles.Chart}>
-      {chartData && chartData.length >= 80 ? (
+      {chartData.length >= 80 ? (
         <div className={styles.ChartWrapper} style={{ margin: 40 }}>
           <LineChart width={750} height={500} data={chartData}>
             <YAxis type="number" yAxisId={0} domain={[0, 90]} />
@@ -157,7 +225,17 @@ const Chart = React.memo((props) => {
           ) : null}
         </div>
       ) : null}
-      <ChartSamples onGetDataSamples={dataSamplesHandler} />
+      {props.kind === "orientation" ? (
+        <ChartSamples
+          kind={props.kind}
+          onGetDataSamples={dataOrientationSamplesHandler}
+        />
+      ) : props.kind === "shipping" ? (
+        <ChartSamples
+          kind={props.kind}
+          onGetDataSamples={dataShippingSamplesHandler}
+        />
+      ) : null}
     </div>
   );
 });
