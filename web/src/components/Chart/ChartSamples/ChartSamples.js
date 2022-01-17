@@ -8,19 +8,34 @@ const ChartSamples = (props) => {
   const mqttValue = useSelector((state) => state.shipping.mqttValue);
   const tcpValue = useSelector((state) => state.shipping.tcpValue);
   const udpValue = useSelector((state) => state.shipping.udpValue);
-
   // ---------- Orientation ------------
   const { X, Y, Z } = socketValue.angle;
   const [samplesX, setSamplesX] = useState(new Array(20).fill(0));
   const [samplesY, setSamplesY] = useState(new Array(20).fill(0));
   const [samplesZ, setSamplesZ] = useState(new Array(20).fill(0));
 
+  const XRef = useRef();
+  const YRef = useRef();
+  const ZRef = useRef();
+
   // ---------- Shipping ----------------
-  const socketAngleX = socketValue.angle.X;
-  const httpAngleX = httpValue.angle.X;
-  const mqttAngleX = mqttValue.angle.X;
-  const tcpAngleX = tcpValue.angle.X;
-  const udpAngleX = udpValue.angle.X;
+
+  const socketAngleXRef = useRef();
+  const httpAngleXRef = useRef();
+  const mqttAngleXRef = useRef();
+  const tcpAngleXRef = useRef();
+  const udpAngleXRef = useRef();
+
+  useEffect(() => {
+    socketAngleXRef.current = socketValue.angle.X;
+    httpAngleXRef.current = httpValue.angle.X;
+    mqttAngleXRef.current = mqttValue.angle.X;
+    tcpAngleXRef.current = tcpValue.angle.X;
+    udpAngleXRef.current = udpValue.angle.X;
+    XRef.current = X;
+    YRef.current = Y;
+    ZRef.current = Z;
+  });
 
   const [samplesSocketX, setSamplesSocketX] = useState(new Array(20).fill(0));
   const [samplesHttpX, setSamplesHttpX] = useState(new Array(20).fill(0));
@@ -28,29 +43,32 @@ const ChartSamples = (props) => {
   const [samplesTcpX, setSamplesTcpX] = useState(new Array(20).fill(0));
   const [samplesUdpX, setSamplesUdpX] = useState(new Array(20).fill(0));
 
-  useEffect(() => {
-    const samplesHandler = (V, setSamples) => {
-      const v = Math.floor(V * 10) / 10;
-      setSamples((prevSamples) => {
-        const copyPrevSamples = [...prevSamples];
-        copyPrevSamples.shift();
-        const newSamples = copyPrevSamples.concat(v);
-        return newSamples;
-      });
-    };
+  const samplesHandler = (V, setSamples) => {
+    const v = Math.floor(V * 10) / 10;
+    setSamples((prevSamples) => {
+      const copyPrevSamples = [...prevSamples];
+      copyPrevSamples.shift();
+      const newSamples = copyPrevSamples.concat(v);
+      return newSamples;
+    });
+  };
 
-    if (props.kind === "orientation") {
-      samplesHandler(X, setSamplesX);
-      samplesHandler(Y, setSamplesY);
-      samplesHandler(Z, setSamplesZ);
-    } else if (props.kind === "shipping") {
-      samplesHandler(socketAngleX, setSamplesSocketX);
-      samplesHandler(httpAngleX, setSamplesHttpX);
-      samplesHandler(mqttAngleX, setSamplesMqttX);
-      samplesHandler(tcpAngleX, setSamplesTcpX);
-      samplesHandler(udpAngleX, setSamplesUdpX);
-    }
-  }, [X, Y, Z, socketAngleX, httpAngleX, mqttAngleX, tcpAngleX, udpAngleX]);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (props.kind === "orientation") {
+        samplesHandler(XRef.current, setSamplesX);
+        samplesHandler(YRef.current, setSamplesY);
+        samplesHandler(ZRef.current, setSamplesZ);
+      } else if (props.kind === "shipping") {
+        samplesHandler(socketAngleXRef.current, setSamplesSocketX);
+        samplesHandler(httpAngleXRef.current, setSamplesHttpX);
+        samplesHandler(mqttAngleXRef.current, setSamplesMqttX);
+        samplesHandler(tcpAngleXRef.current, setSamplesTcpX);
+        samplesHandler(udpAngleXRef.current, setSamplesUdpX);
+      }
+    }, 0);
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     const getDataSamples = (samples) => {

@@ -12,4 +12,21 @@ const getAxisTime = () => {
   return time;
 };
 
-export { renderDot, getAxisTime };
+const countAnglesHandler = (data) => {
+  const x = data.accel["x"];
+  const y = data.accel["y"];
+  const z = data.accel["z"];
+
+  const angle_x = Math.atan2(x, Math.sqrt(y * y + z * z)) / (Math.PI / 180);
+  const angle_y = Math.atan2(y, Math.sqrt(x * x + z * z)) / (Math.PI / 180);
+  const angle_z = Math.atan2(z, Math.sqrt(x * x + y * y)) / (Math.PI / 180);
+
+  const angle = {
+    X: angle_x,
+    Y: angle_y,
+    Z: angle_z,
+  };
+  return angle;
+};
+
+export { renderDot, getAxisTime, countAnglesHandler };

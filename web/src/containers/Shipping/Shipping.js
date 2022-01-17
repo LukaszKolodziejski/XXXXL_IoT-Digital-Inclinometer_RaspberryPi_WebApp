@@ -1,44 +1,27 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import openSocket from "socket.io-client";
-import axios from "../../axios-api";
-import mqtt from "mqtt";
 
 import Options from "../../components/Options/Options";
 import Chart from "../../components/Chart/Chart";
 import styles from "./Shipping.module.css";
-import {
-  CLIENT_ID,
-  CONNECT_URL,
-  TOPIC,
-  OPTIONS,
-} from "../../constants/protocols";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { countAnglesHandler } from "../../functions/functions";
 
 import * as actions from "../../store/actions/index";
 
 const NAMES = ["WebSocket", "HTTP", "MQTT", "TCP", "UDP"];
 
-// >>>>>>>>>>>>>>>>>>>>>>>> New
-const initData = {
-  data: null,
-  transferTime: 0,
-  angle: {
-    X: 0,
-    Y: 0,
-    Z: 0,
-  },
-};
-// <<<<<<<<<<<<<<<<<<<<<<<<
-
 const Shipping = React.memo((props) => {
-  const [clientMqtt, setClientMqtt] = useState(null);
-  const [connectStatus, setConnectStatus] = useState(null);
-  const [socketValue, setSocketValue] = useState(initData);
-  const [httpValue, setHttpValue] = useState(initData);
-  const [mqttValue, setMqttValue] = useState(initData);
-  const [tcpValue, setTcpValue] = useState(initData);
-  const [udpValue, setUdpValue] = useState(initData);
   const [err, setErr] = useState(null);
+
+  const websocketRawData = useSelector(
+    (state) => state.protocols.websocket.rawData
+  );
+  const httpRawData = useSelector((state) => state.protocols.http.rawData);
+  const clientMqtt = useSelector((state) => state.protocols.mqtt.client);
+  const messageMqtt = useSelector((state) => state.protocols.mqtt.message);
+  const tcpRawData = useSelector((state) => state.protocols.tcp.buffer);
+  const udpRawData = useSelector((state) => state.protocols.udp.buffer);
+  const syncTime = useSelector((state) => state.protocols.websocket.syncTime);
 
   const [options, setOptions] = useState(
     NAMES.map((name) => ({ text: name, active: false }))
@@ -58,19 +41,13 @@ const Shipping = React.memo((props) => {
     activeUDPRef.current = options[4].active;
   }, [options]);
 
-  const [syncTime, setSyncTime] = useState(0);
-  const syncTimeRef = useRef();
-
   const dispatch = useDispatch();
   const onSocketValue = (data) => dispatch(actions.socketValueHandler(data));
   const onHttpValue = (data) => dispatch(actions.httpValueHandler(data));
   const onMqttValue = (data) => dispatch(actions.mqttValueHandler(data));
   const onTcpValue = (data) => dispatch(actions.tcpValueHandler(data));
   const onUdpValue = (data) => dispatch(actions.udpValueHandler(data));
-
-  useEffect(() => {
-    syncTimeRef.current = syncTime;
-  });
+  const onGetMqttMessage = (client) => dispatch(actions.getMqttMessage(client));
 
   const clickOptionItemHandler = (option, active) => {
     const newOptions = options.map((opt) =>
@@ -79,44 +56,23 @@ const Shipping = React.memo((props) => {
     setOptions(newOptions);
   };
 
-  useEffect(() => {
-    console.log(options);
-  }, [options]);
-
   const receivedDataHandler = useCallback(
     (proof) => {
       if (proof.rawData) {
         const { data, startTime } = proof.rawData;
         const endTime = new Date().getTime();
-        const transferTime = endTime - startTime - syncTimeRef.current;
+        const transferTime = endTime - startTime - syncTime;
+        const angle = countAnglesHandler(data);
         // console.log("transferTime");
         // console.log(transferTime);
 
-        const x = data.accel["x"];
-        const y = data.accel["y"];
-        const z = data.accel["z"];
-
-        const angle_x =
-          Math.atan2(x, Math.sqrt(y * y + z * z)) / (Math.PI / 180);
-        const angle_y =
-          Math.atan2(y, Math.sqrt(x * x + z * z)) / (Math.PI / 180);
-        const angle_z =
-          Math.atan2(z, Math.sqrt(x * x + y * y)) / (Math.PI / 180);
-
-        const angle = {
-          X: angle_x,
-          Y: angle_y,
-          Z: angle_z,
-        };
-
         return {
-          data,
           angle,
           transferTime,
         };
       }
     },
-    [syncTimeRef]
+    [syncTime]
   );
 
   const protocolActiveHandler = useCallback(
@@ -147,94 +103,49 @@ const Shipping = React.memo((props) => {
     }
   };
 
-  const timeSynchronizationHandler = (socket) => {
-    socket.on("syncTime", (data) => {
-      if (data.action === "sync") {
-        const end = new Date().getTime();
-        setSyncTime(end - data.start);
-      }
-    });
-  };
+  // Websocket
+  useEffect(() => {
+    protocolActiveHandler("WebSocket", () =>
+      onSocketValue(receivedDataHandler(websocketRawData))
+    );
+  }, [websocketRawData]);
+
+  // HTTP
+  useEffect(() => {
+    const protocol = () => onHttpValue(receivedDataHandler(httpRawData.data));
+    protocolActiveHandler("HTTP", protocol);
+  }, [httpRawData]);
+
+  // MQTT
+  useEffect(() => {
+    const message = bufferToReceivedDataHandler("mqtt", messageMqtt);
+    const protocol = () => onMqttValue(message);
+    protocolActiveHandler("MQTT", protocol);
+  }, [messageMqtt]);
 
   useEffect(() => {
-    // Websocket
-    const socket = openSocket("http://192.168.1.131:8080/", OPTIONS);
-    timeSynchronizationHandler(socket);
-    socket.on("serverData", (data) => {
-      if (data.action === "create") {
-        const protocol = () => onSocketValue(receivedDataHandler(data));
-        protocolActiveHandler("WebSocket", protocol);
-      }
-    });
-
-    // MQTT
-    setClientMqtt(mqtt.connect(CONNECT_URL, { CLIENT_ID }));
-
-    // HTTP
-    setInterval(() => {
-      axios
-        .get("/http-data")
-        .then((res) => {
-          if (res) {
-            const protocol = () => onHttpValue(receivedDataHandler(res.data));
-            protocolActiveHandler("HTTP", protocol);
-          }
-        })
-        // .catch((err) => console.log(err));
-        .catch((err) => setErr(err));
-    }, 20);
-
-    // TCP
-    const socketTcp = openSocket("ws://192.168.1.131:1338/", OPTIONS);
-    socketTcp.on("serverDataTCP", ({ buffer }) => {
-      const receivedData = bufferToReceivedDataHandler("tcp", buffer);
-      const protocol = () => onTcpValue(receivedData);
-      if (receivedData) protocolActiveHandler("TCP", protocol);
-    });
-
-    // UDP
-    const socketUdp = openSocket("ws://192.168.1.131:5050/", OPTIONS);
-    socketUdp.on("serverDataUDP", ({ buffer }) => {
-      const receivedData = bufferToReceivedDataHandler("udp", buffer);
-      const protocol = () => onUdpValue(receivedData);
-      if (receivedData) protocolActiveHandler("UDP", protocol);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (clientMqtt) {
-      clientMqtt.on("connect", () => {
-        const log = (topic) => console.log(`Subscribe: '${topic}'`);
-        clientMqtt.subscribe(TOPIC[0], () => log(TOPIC[0]));
-        clientMqtt.subscribe(TOPIC[1], () => log(TOPIC[1]));
-        clientMqtt.subscribe(TOPIC[2], () => log(TOPIC[2]));
-        clientMqtt.subscribe(TOPIC[3], () => log(TOPIC[3]));
-        setConnectStatus("Connected");
-      });
-      clientMqtt.on("error", (err) => {
-        console.error(`Connection error: ${err}`);
-        clientMqtt.end();
-      });
-      clientMqtt.on("reconnect", () => setConnectStatus("Reconnecting"));
-
-      clientMqtt.on("message", (TOPIC, message) => {
-        const payload = {
-          TOPIC,
-          message: bufferToReceivedDataHandler("mqtt", message),
-        };
-        console.log(payload.TOPIC);
-        const protocol = () => onMqttValue(payload.message);
-        protocolActiveHandler("MQTT", protocol);
-      });
-    }
+    onGetMqttMessage(clientMqtt);
   }, [clientMqtt]);
+
+  // TCP
+  useEffect(() => {
+    const receivedData = bufferToReceivedDataHandler("tcp", tcpRawData);
+    const protocol = () => onTcpValue(receivedData);
+    if (receivedData) protocolActiveHandler("TCP", protocol);
+  }, [tcpRawData]);
+
+  // UDP
+  useEffect(() => {
+    const receivedData = bufferToReceivedDataHandler("udp", udpRawData);
+    const protocol = () => onUdpValue(receivedData);
+    if (receivedData) protocolActiveHandler("UDP", protocol);
+  }, [udpRawData]);
 
   return (
     <div className={styles.Shipping}>
       <Options values={NAMES} onClick={clickOptionItemHandler} />
       <Chart kind="shipping" options={options} />
       <div></div>
-      {/* <div></div> Suwak */}
     </div>
   );
 });

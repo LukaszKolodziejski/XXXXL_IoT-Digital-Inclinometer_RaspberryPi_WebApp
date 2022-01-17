@@ -2,7 +2,6 @@ import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   httpValue: {
-    data: null,
     transferTime: 0,
     angle: {
       X: 0,
@@ -11,7 +10,6 @@ const initialState = {
     },
   },
   mqttValue: {
-    data: null,
     transferTime: 0,
     angle: {
       X: 0,
@@ -20,7 +18,6 @@ const initialState = {
     },
   },
   tcpValue: {
-    data: null,
     transferTime: 0,
     angle: {
       X: 0,
@@ -29,7 +26,6 @@ const initialState = {
     },
   },
   udpValue: {
-    data: null,
     transferTime: 0,
     angle: {
       X: 0,
@@ -39,6 +35,7 @@ const initialState = {
   },
 };
 
+//TODO: transfer time
 const setHttpValue = (state, action) => ({
   ...state,
   httpValue: action.httpValue,
