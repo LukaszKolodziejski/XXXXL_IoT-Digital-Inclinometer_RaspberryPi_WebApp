@@ -4,7 +4,7 @@ import Options from "../../components/Options/Options";
 import Chart from "../../components/Chart/Chart";
 import styles from "./Shipping.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import { countAnglesHandler } from "../../functions/functions";
+import { countAnglesHandler } from "../../utils/utils";
 
 import * as actions from "../../store/actions/index";
 
@@ -33,14 +33,6 @@ const Shipping = React.memo((props) => {
   const activeTCPRef = useRef();
   const activeUDPRef = useRef();
 
-  useEffect(() => {
-    activeWebsocketRef.current = options[0].active;
-    activeHTTPRef.current = options[1].active;
-    activeMQTTRef.current = options[2].active;
-    activeTCPRef.current = options[3].active;
-    activeUDPRef.current = options[4].active;
-  }, [options]);
-
   const dispatch = useDispatch();
   const onSocketValue = (data) => dispatch(actions.socketValueHandler(data));
   const onHttpValue = (data) => dispatch(actions.httpValueHandler(data));
@@ -48,6 +40,14 @@ const Shipping = React.memo((props) => {
   const onTcpValue = (data) => dispatch(actions.tcpValueHandler(data));
   const onUdpValue = (data) => dispatch(actions.udpValueHandler(data));
   const onGetMqttMessage = (client) => dispatch(actions.getMqttMessage(client));
+
+  useEffect(() => {
+    activeWebsocketRef.current = options[0].active;
+    activeHTTPRef.current = options[1].active;
+    activeMQTTRef.current = options[2].active;
+    activeTCPRef.current = options[3].active;
+    activeUDPRef.current = options[4].active;
+  }, [options]);
 
   const clickOptionItemHandler = (option, active) => {
     const newOptions = options.map((opt) =>
