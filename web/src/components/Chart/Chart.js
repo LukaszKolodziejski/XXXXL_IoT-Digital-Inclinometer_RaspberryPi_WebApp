@@ -15,7 +15,7 @@ import ChartSamples from "./ChartSamples/ChartSamples";
 import Button from "../UI/Button/Button";
 import styles from "./Chart.module.css";
 import { COLORS } from "../../constants/colors";
-import { renderDot, getAxisTime } from "../../functions/functions";
+import { renderDot, getAxisTime } from "../../utils/utils";
 
 const Chart = React.memo((props) => {
   const [chartData, setChartData] = useState([]);

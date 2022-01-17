@@ -4,7 +4,7 @@ import Options from "../../components/Options/Options";
 import Chart from "../../components/Chart/Chart";
 import styles from "./Orientation.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { countAnglesHandler } from "../../functions/functions";
+import { countAnglesHandler } from "../../utils/utils";
 import * as actions from "../../store/actions/index";
 
 const NAMES = ["X", "Y", "Z"];

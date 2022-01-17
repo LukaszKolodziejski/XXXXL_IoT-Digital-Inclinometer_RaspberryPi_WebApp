@@ -8,6 +8,7 @@ const ChartSamples = (props) => {
   const mqttValue = useSelector((state) => state.shipping.mqttValue);
   const tcpValue = useSelector((state) => state.shipping.tcpValue);
   const udpValue = useSelector((state) => state.shipping.udpValue);
+
   // ---------- Orientation ------------
   const { X, Y, Z } = socketValue.angle;
   const [samplesX, setSamplesX] = useState(new Array(20).fill(0));
@@ -19,7 +20,6 @@ const ChartSamples = (props) => {
   const ZRef = useRef();
 
   // ---------- Shipping ----------------
-
   const socketAngleXRef = useRef();
   const httpAngleXRef = useRef();
   const mqttAngleXRef = useRef();
