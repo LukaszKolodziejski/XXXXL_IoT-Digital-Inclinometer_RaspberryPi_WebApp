@@ -53,17 +53,53 @@ const main = () => {
   let ay_sum = 0;
   let az_sum = 0;
 
+  let xSamplesArray = new Array(20).fill(0);
+  let ySamplesArray = new Array(20).fill(0);
+
   const angleArrayX = [];
   const angleArrayY = [];
+
   const timeArray = [];
 
   const loop = IMU.length;
-  const countSample = 10; // aproximation 10
+  const countSample = 10; // approximation 10
   const delay = 21;
-  const stack = 10;
+  // const stack = 10;
+  const stack = 5;
   let start, end, time;
 
   initProtocols();
+
+  const samplesHandler = (angle, samplesArray) => {
+    const ang = Math.floor(angle);
+    const copySamples = [...samplesArray];
+    copySamples.shift();
+    const newSamples = copySamples.concat(ang);
+    return newSamples;
+  };
+
+  const getApproximationData = (samples) => {
+    const angle = [...samples];
+    angle.sort((a, b) => a - b);
+    const avg = Math.floor((angle[15] + angle[16] + angle[17]) / 3);
+    return avg;
+  };
+
+  const timeHandler = (start) => {
+    end = new Date().getTime();
+    time = end - start;
+    timeArray.push(time);
+    if (actualSample >= countSample) {
+      let sumeOfTime = 0;
+      const loopDelay = delay / loop;
+      timeArray.forEach((time) => (sumeOfTime += time));
+      const sensorDelay = sumeOfTime / timeArray.length;
+      // console.log(timeArray);
+      // console.log(`loopDelay: ${loopDelay} | sensorDelay: ${sensorDelay}`);
+      actualSample = 0;
+      timeArray.length = 0;
+    }
+  };
 
   setInterval(() => {
     timeSynchronization();
@@ -72,43 +108,35 @@ const main = () => {
         start = new Date().getTime();
         IMU[i].getValue((err, data) => {
           sendRawData(data);
-          const ax = data.accel["x"];
-          const ay = data.accel["y"];
-          const az = data.accel["z"];
-          ax_sum += ax;
-          ay_sum += ay;
-          az_sum += az;
-          end = new Date().getTime();
-          time = end - start;
-          timeArray.push(time);
+          timeHandler(start);
+          const x = data.accel["x"];
+          const y = data.accel["y"];
+          const z = data.accel["z"];
+
+          const angle_x =
+            Math.atan2(x, Math.sqrt(y * y + z * z)) / (Math.PI / 180);
+          const angle_y =
+            Math.atan2(y, Math.sqrt(x * x + z * z)) / (Math.PI / 180);
+
+          xSamplesArray = samplesHandler(angle_x, xSamplesArray);
+          ySamplesArray = samplesHandler(angle_y, ySamplesArray);
+
+          const xApprox = getApproximationData(xSamplesArray);
+          const yApprox = getApproximationData(ySamplesArray);
+
+          angleArrayX.push(xApprox);
+          angleArrayY.push(yApprox);
+
+          actualSample++;
         });
-        actualSample++;
       }, (delay / loop) * i);
     }
 
-    if (actualSample >= countSample) {
-      const x = ax_sum / countSample;
-      const y = ay_sum / countSample;
-      const z = az_sum / countSample;
-
-      // Calculate of roll and pitch in deg
-      const angle_x = Math.atan2(x, Math.sqrt(y * y + z * z)) / (Math.PI / 180);
-      const angle_y = Math.atan2(y, Math.sqrt(x * x + z * z)) / (Math.PI / 180);
-
-      actualSample = 0;
-      ax_sum = ay_sum = az_sum = 0;
-      angleArrayX.push(angle_x.toFixed(0));
-      angleArrayY.push(angle_y.toFixed(0));
-    }
-
     if (angleArrayX.length >= stack) {
-      // Reset values for next aproximation
-
       const angleArrayXCopy = [...angleArrayX];
       const angleArrayYCopy = [...angleArrayY];
       angleArrayXCopy.sort((a, b) => a - b);
       angleArrayYCopy.sort((a, b) => a - b);
-      // console.log(`> > ${angleArrayXCopy}`);
 
       const medianPointerArrayX = Math.floor(angleArrayXCopy.length / 2);
       const medianPointerArrayY = Math.floor(angleArrayYCopy.length / 2);
@@ -123,22 +151,10 @@ const main = () => {
       AxisX.angle = angleMedianArrayX;
       AxisY.angle = angleMedianArrayY;
 
-      //TODO: This work.
-      // sendRawData(ValueX.angle);
-
       fillOutMatirx(ValueX, AxisX, AxisY);
 
       angleArrayX.length = 0;
       angleArrayY.length = 0;
-
-      let sumeOfTime = 0;
-      const loopDelay = delay / loop;
-      timeArray.forEach((time) => (sumeOfTime += time));
-      const sensorDelay = sumeOfTime / timeArray.length;
-
-      // console.log(`loopDelay: ${loopDelay} | sensorDelay: ${sensorDelay}`);
-
-      timeArray.length = 0;
     }
   }, delay);
 };
