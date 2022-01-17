@@ -10,7 +10,6 @@
   font-weight: bold;
   -webkit-transition: 0.3s;
   transition: 0.3s;
-  margin-top: 10px;
 }
 
 .Button:hover {
@@ -19,7 +18,6 @@
 
 .Button:first-of-type {
   margin-left: 100px;
-  margin-right: 20px;
 }
 
 .Success {
