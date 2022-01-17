@@ -48,25 +48,17 @@ const timeSynchronization = () => {
 };
 
 const main = () => {
-  let actualSample = 0;
-  let ax_sum = 0;
-  let ay_sum = 0;
-  let az_sum = 0;
+  const stack = 5;
+  const delay = 21;
+  const loop = IMU.length;
+  const angleArrayX = [];
+  const angleArrayY = [];
+  const timeArray = [];
+  let timeSample = 0;
+  let start, end, time;
 
   let xSamplesArray = new Array(20).fill(0);
   let ySamplesArray = new Array(20).fill(0);
-
-  const angleArrayX = [];
-  const angleArrayY = [];
-
-  const timeArray = [];
-
-  const loop = IMU.length;
-  const countSample = 10; // approximation 10
-  const delay = 21;
-  // const stack = 10;
-  const stack = 5;
-  let start, end, time;
 
   initProtocols();
 
@@ -78,7 +70,7 @@ const main = () => {
     return newSamples;
   };
 
-  const getApproximationData = (samples) => {
+  const getApproximationDataHandler = (samples) => {
     const angle = [...samples];
     angle.sort((a, b) => a - b);
     const avg = Math.floor((angle[15] + angle[16] + angle[17]) / 3);
@@ -89,14 +81,14 @@ const main = () => {
     end = new Date().getTime();
     time = end - start;
     timeArray.push(time);
-    if (actualSample >= countSample) {
+    if (timeSample >= 10) {
       let sumeOfTime = 0;
       const loopDelay = delay / loop;
       timeArray.forEach((time) => (sumeOfTime += time));
       const sensorDelay = sumeOfTime / timeArray.length;
       // console.log(timeArray);
       // console.log(`loopDelay: ${loopDelay} | sensorDelay: ${sensorDelay}`);
-      actualSample = 0;
+      timeSample = 0;
       timeArray.length = 0;
     }
   };
@@ -121,13 +113,13 @@ const main = () => {
           xSamplesArray = samplesHandler(angle_x, xSamplesArray);
           ySamplesArray = samplesHandler(angle_y, ySamplesArray);
 
-          const xApprox = getApproximationData(xSamplesArray);
-          const yApprox = getApproximationData(ySamplesArray);
+          const xApprox = getApproximationDataHandler(xSamplesArray);
+          const yApprox = getApproximationDataHandler(ySamplesArray);
 
           angleArrayX.push(xApprox);
           angleArrayY.push(yApprox);
 
-          actualSample++;
+          timeSample++;
         });
       }, (delay / loop) * i);
     }
