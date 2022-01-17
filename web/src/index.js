@@ -7,6 +7,7 @@ import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import orientationReducer from "./store/reducers/orientation";
 import shippingReducer from "./store/reducers/shipping";
+import protocolsReducer from "./store/reducers/protocols";
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -14,6 +15,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = {
   orientation: orientationReducer,
   shipping: shippingReducer,
+  protocols: protocolsReducer,
 };
 
 const store = createStore(

@@ -8,7 +8,6 @@ const ChartSamples = (props) => {
   const mqttValue = useSelector((state) => state.shipping.mqttValue);
   const tcpValue = useSelector((state) => state.shipping.tcpValue);
   const udpValue = useSelector((state) => state.shipping.udpValue);
-  // console.log(socketValue);
   // ---------- Orientation ------------
   const { X, Y, Z } = socketValue.angle;
   const [samplesX, setSamplesX] = useState(new Array(20).fill(0));
