@@ -14,13 +14,12 @@ import {
 import ChartSamples from "./ChartSamples/ChartSamples";
 import Button from "../UI/Button/Button";
 import styles from "./Chart.module.css";
-import { STROKE } from "../../constants/colors";
+import { COLORS } from "../../constants/colors";
 import { renderDot, getAxisTime } from "../../functions/functions";
 
 const Chart = React.memo((props) => {
   const [chartData, setChartData] = useState([]);
   const [isPaused, setIsPaused] = useState(false);
-  const [intervalClock, setIntervalClock] = useState(null);
   const [isOptionActived, setIsOptionActived] = useState(false);
   const [chartLength, setChartLength] = useState(600);
   const [varChartLength, setVarChartLength] = useState(600);
@@ -137,17 +136,12 @@ const Chart = React.memo((props) => {
     isPaused,
   ]);
 
-  const pauseHandler = () => {
-    setIsPaused((prev) => !prev);
-    clearInterval(intervalClock);
-  };
+  const pauseHandler = () => setIsPaused((prev) => !prev);
 
   useEffect(() => {
     if (isOptionActived) {
-      const interval = setInterval(chartDataHandler, 5);
-      setIntervalClock(interval);
-    } else {
-      clearInterval(intervalClock);
+      const interval = setInterval(chartDataHandler, 2);
+      return () => clearInterval(interval);
     }
   }, [isPaused, isOptionActived]);
 
@@ -158,7 +152,7 @@ const Chart = React.memo((props) => {
     const countActiveStatus = options.filter(
       (opt) => opt.active === true
     ).length;
-    const length = (6 - countActiveStatus) * 100; // TODO: work in Orientation
+    const length = (6.5 - countActiveStatus) * 100;
     setChartLength(length);
   }, [options]);
 
@@ -176,7 +170,7 @@ const Chart = React.memo((props) => {
         key={opt.text}
         dataKey={opt.text.toLowerCase()}
         name={lineNameHandler(opt.text)}
-        stroke={STROKE[`${opt.text}`]}
+        stroke={COLORS[`${opt.text}`]}
         strokeWidth={2}
         yAxisId={0}
         dot={renderDot}
@@ -189,8 +183,8 @@ const Chart = React.memo((props) => {
       <Area
         key={opt.text}
         dataKey={opt.text.toLowerCase()}
-        stroke={STROKE[`${opt.text}`]}
-        fill={STROKE[`${opt.text}`]}
+        stroke={COLORS[`${opt.text}`]}
+        fill={COLORS[`${opt.text}`]}
       />
     ) : null
   );
