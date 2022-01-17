@@ -2,14 +2,12 @@ import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   socketValue: {
-    data: null,
     transferTime: 0,
     angle: {
       X: 0,
       Y: 0,
       Z: 0,
     },
-    // chartData: [],
   },
 };
 

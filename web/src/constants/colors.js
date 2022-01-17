@@ -1,15 +1,15 @@
-const STROKE = {
-  // X: "#ff7300",
-  X: "#8800ff",
-  // Y: "#ff73f0",
-  Y: "#ff7300",
-  Z: "#f7f300",
+const COLORS = {
+  X: "#00d0ff",
+  Y: "#95ff00",
+  Z: "#ffc800",
 
-  WebSocket: "#ff0800",
-  HTTP: "#ff8400",
-  MQTT: "#00ffb3",
-  TCP: "#00ff95",
+  WebSocket: "#00d0ff",
+  HTTP: "#95ff00",
+  MQTT: "#ff0800",
+  TCP: "#ebeb05",
   UDP: "#8800ff",
+
+  option: "rgb(211, 37, 37)",
 };
 
-export { STROKE };
+export { COLORS };
