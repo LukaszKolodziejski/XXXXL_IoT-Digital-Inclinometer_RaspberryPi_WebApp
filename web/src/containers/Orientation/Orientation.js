@@ -22,12 +22,6 @@ const Orientation = React.memo((props) => {
   const dispatch = useDispatch();
   const onSocketValue = (ws) => dispatch(actions.socketValueHandler(ws));
 
-  const activeWebsocketRef = useRef();
-
-  useEffect(() => {
-    activeWebsocketRef.current = options[0].active;
-  }, [options]);
-
   const clickOptionItemHandler = (option, active) => {
     const newOptions = options.map((opt) =>
       opt.text === option ? { ...opt, active } : opt
@@ -56,8 +50,7 @@ const Orientation = React.memo((props) => {
 
   // Websocket
   useEffect(() => {
-    if (activeWebsocketRef.current)
-      onSocketValue(receivedDataHandler(websocketRawData));
+    onSocketValue(receivedDataHandler(websocketRawData));
   }, [websocketRawData]);
 
   return (
