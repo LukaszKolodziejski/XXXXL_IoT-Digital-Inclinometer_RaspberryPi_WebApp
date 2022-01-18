@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const ChartSamples = (props) => {
   const socketValue = useSelector((state) => state.orientation.socketValue);
@@ -10,31 +10,39 @@ const ChartSamples = (props) => {
   const udpValue = useSelector((state) => state.shipping.udpValue);
 
   // ---------- Orientation ------------
-  const { X, Y, Z } = socketValue.angle;
   const [samplesX, setSamplesX] = useState(new Array(20).fill(0));
   const [samplesY, setSamplesY] = useState(new Array(20).fill(0));
   const [samplesZ, setSamplesZ] = useState(new Array(20).fill(0));
 
-  const XRef = useRef();
-  const YRef = useRef();
-  const ZRef = useRef();
+  const XRef = useRef(null);
+  const YRef = useRef(null);
+  const ZRef = useRef(null);
 
-  // ---------- Shipping ----------------
-  const socketAngleXRef = useRef();
-  const httpAngleXRef = useRef();
-  const mqttAngleXRef = useRef();
-  const tcpAngleXRef = useRef();
-  const udpAngleXRef = useRef();
+  // ------- Shipping & Transfer---------
+  const socketRef = useRef(null);
+  const httpRef = useRef(null);
+  const mqttRef = useRef(null);
+  const tcpRef = useRef(null);
+  const udpRef = useRef(null);
 
   useEffect(() => {
-    socketAngleXRef.current = socketValue.angle.X;
-    httpAngleXRef.current = httpValue.angle.X;
-    mqttAngleXRef.current = mqttValue.angle.X;
-    tcpAngleXRef.current = tcpValue.angle.X;
-    udpAngleXRef.current = udpValue.angle.X;
-    XRef.current = X;
-    YRef.current = Y;
-    ZRef.current = Z;
+    if (socketValue && props.kind === "orientation") {
+      XRef.current = socketValue.angle.X;
+      YRef.current = socketValue.angle.Y;
+      ZRef.current = socketValue.angle.Z;
+    } else if (props.kind === "shipping") {
+      if (socketValue) socketRef.current = socketValue.angle.X;
+      if (httpValue) httpRef.current = httpValue.angle.X;
+      if (mqttValue) mqttRef.current = mqttValue.angle.X;
+      if (tcpValue) tcpRef.current = tcpValue.angle.X;
+      if (udpValue) udpRef.current = udpValue.angle.X;
+    } else if (props.kind === "transfer") {
+      if (socketValue) socketRef.current = socketValue.transferTime;
+      if (httpValue) httpRef.current = httpValue.transferTime;
+      if (mqttValue) mqttRef.current = mqttValue.transferTime;
+      if (tcpValue) tcpRef.current = tcpValue.transferTime;
+      if (udpValue) udpRef.current = udpValue.transferTime;
+    }
   });
 
   const [samplesSocketX, setSamplesSocketX] = useState(new Array(20).fill(0));
@@ -59,12 +67,12 @@ const ChartSamples = (props) => {
         samplesHandler(XRef.current, setSamplesX);
         samplesHandler(YRef.current, setSamplesY);
         samplesHandler(ZRef.current, setSamplesZ);
-      } else if (props.kind === "shipping") {
-        samplesHandler(socketAngleXRef.current, setSamplesSocketX);
-        samplesHandler(httpAngleXRef.current, setSamplesHttpX);
-        samplesHandler(mqttAngleXRef.current, setSamplesMqttX);
-        samplesHandler(tcpAngleXRef.current, setSamplesTcpX);
-        samplesHandler(udpAngleXRef.current, setSamplesUdpX);
+      } else if (props.kind === "shipping" || props.kind === "transfer") {
+        samplesHandler(socketRef.current, setSamplesSocketX);
+        samplesHandler(httpRef.current, setSamplesHttpX);
+        samplesHandler(mqttRef.current, setSamplesMqttX);
+        samplesHandler(tcpRef.current, setSamplesTcpX);
+        samplesHandler(udpRef.current, setSamplesUdpX);
       }
     }, 0);
     return () => clearInterval(intervalId);
@@ -72,10 +80,15 @@ const ChartSamples = (props) => {
 
   useEffect(() => {
     const getDataSamples = (samples) => {
-      const angle = [...samples];
-      angle.sort((a, b) => a - b);
-      const avg =
-        Math.floor(((angle[15] + angle[16] + angle[17]) / 3) * 10) / 10;
+      const sample = [...samples];
+      sample.sort((a, b) => a - b);
+      let avg;
+      if (props.kind === "transfer") {
+        avg = Math.floor((sample[9] + sample[10] + sample[11]) / 3);
+      } else {
+        avg =
+          Math.floor(((sample[15] + sample[16] + sample[17]) / 3) * 10) / 10;
+      }
       return avg;
     };
 
@@ -84,7 +97,7 @@ const ChartSamples = (props) => {
       const y = getDataSamples(samplesY);
       const z = getDataSamples(samplesZ);
       props.onGetDataSamples(x, y, z);
-    } else if (props.kind === "shipping") {
+    } else if (props.kind === "shipping" || props.kind === "transfer") {
       const socketX = getDataSamples(samplesSocketX);
       const httpX = getDataSamples(samplesHttpX);
       const mqttX = getDataSamples(samplesMqttX);

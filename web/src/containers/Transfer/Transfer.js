@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 
 import Options from "../../components/Options/Options";
 import Chart from "../../components/Chart/Chart";
-import styles from "./Shipping.module.css";
+import styles from "./Transfer.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { countAnglesHandler } from "../../utils/utils";
 
@@ -10,7 +10,7 @@ import * as actions from "../../store/actions/index";
 
 const NAMES = ["WebSocket", "HTTP", "MQTT", "TCP", "UDP"];
 
-const Shipping = React.memo((props) => {
+const Transfer = React.memo((props) => {
   const [err, setErr] = useState(null);
 
   const websocketRawData = useSelector(
@@ -136,12 +136,12 @@ const Shipping = React.memo((props) => {
   }, [udpRawData]);
 
   return (
-    <div className={styles.Shipping}>
+    <div className={styles.Transfer}>
       <Options values={NAMES} onClick={clickOptionItemHandler} />
-      <Chart kind="shipping" options={options} />
+      <Chart kind="transfer" options={options} />
       <div></div>
     </div>
   );
 });
 
-export default Shipping;
+export default Transfer;

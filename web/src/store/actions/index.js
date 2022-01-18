@@ -13,5 +13,4 @@ export {
   mqttInit,
   tcpInit,
   udpInit,
-  getMqttMessage,
 } from "./protocols";
