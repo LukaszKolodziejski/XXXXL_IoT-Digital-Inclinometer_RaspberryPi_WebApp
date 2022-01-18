@@ -24,14 +24,15 @@ const Chart = React.memo((props) => {
   const [chartLength, setChartLength] = useState(600);
   const [varChartLength, setVarChartLength] = useState(600);
 
+  const [socketAngleX, setSocketAngleX] = useState(0);
   const [socketAngleY, setSocketAngleY] = useState(0);
   const [socketAngleZ, setSocketAngleZ] = useState(0);
 
-  const [socketAngleX, setSocketAngleX] = useState(0);
-  const [httpAngleX, setHttpAngleX] = useState(0);
-  const [mqttAngleX, setMqttAngleX] = useState(0);
-  const [tcpAngleX, setTcpAngleX] = useState(0);
-  const [udpAngleX, setUdpAngleX] = useState(0);
+  const [socketValue, setSocketValue] = useState(0);
+  const [httpValue, setHttpValue] = useState(0);
+  const [mqttValue, setMqttValue] = useState(0);
+  const [tcpValue, setTcpValue] = useState(0);
+  const [udpValue, setUdpValue] = useState(0);
 
   const { options } = props;
 
@@ -39,10 +40,11 @@ const Chart = React.memo((props) => {
   const socketAngleYRef = useRef();
   const socketAngleZRef = useRef();
 
-  const httpAngleXRef = useRef();
-  const mqttAngleXRef = useRef();
-  const tcpAngleXRef = useRef();
-  const udpAngleXRef = useRef();
+  const socketValueRef = useRef();
+  const httpValueRef = useRef();
+  const mqttValueRef = useRef();
+  const tcpValueRef = useRef();
+  const udpValueRef = useRef();
 
   const chartLengthRef = useRef();
   const chartVarLengthRef = useRef();
@@ -52,27 +54,16 @@ const Chart = React.memo((props) => {
       socketAngleXRef.current = socketAngleX;
       socketAngleYRef.current = socketAngleY;
       socketAngleZRef.current = socketAngleZ;
-    } else if (props.kind === "shipping") {
-      socketAngleXRef.current = socketAngleX;
-      httpAngleXRef.current = httpAngleX;
-      mqttAngleXRef.current = mqttAngleX;
-      tcpAngleXRef.current = tcpAngleX;
-      udpAngleXRef.current = udpAngleX;
+    } else if (props.kind === "shipping" || props.kind === "transfer") {
+      socketValueRef.current = socketValue;
+      httpValueRef.current = httpValue;
+      mqttValueRef.current = mqttValue;
+      tcpValueRef.current = tcpValue;
+      udpValueRef.current = udpValue;
     }
     chartLengthRef.current = chartLength;
     chartVarLengthRef.current = varChartLength;
-  }, [
-    socketAngleX,
-    socketAngleY,
-    socketAngleZ,
-    socketAngleX,
-    httpAngleX,
-    mqttAngleX,
-    tcpAngleX,
-    udpAngleX,
-    chartLength,
-    varChartLength,
-  ]);
+  });
 
   // Orientation
   const dataOrientationSamplesHandler = (x, y, z) => {
@@ -81,13 +72,13 @@ const Chart = React.memo((props) => {
     setSocketAngleZ(z);
   };
 
-  // Shipping
-  const dataShippingSamplesHandler = (socketX, httpX, mqttX, tcpX, udpX) => {
-    setSocketAngleX(socketX);
-    setHttpAngleX(httpX);
-    setMqttAngleX(mqttX);
-    setTcpAngleX(tcpX);
-    setUdpAngleX(udpX);
+  // Shipping & Transfer
+  const dataSamplesHandler = (socketX, httpX, mqttX, tcpX, udpX) => {
+    setSocketValue(socketX);
+    setHttpValue(httpX);
+    setMqttValue(mqttX);
+    setTcpValue(tcpX);
+    setUdpValue(udpX);
   };
 
   const chartDataHandler = useCallback(() => {
@@ -98,14 +89,15 @@ const Chart = React.memo((props) => {
         const y = socketAngleYRef.current;
         const z = socketAngleZRef.current;
         newData = { time: getAxisTime(), x, y, z };
-      } else if (props.kind === "shipping") {
-        const websocket = socketAngleXRef.current;
-        const http = httpAngleXRef.current;
-        const mqtt = mqttAngleXRef.current;
-        const tcp = tcpAngleXRef.current;
-        const udp = udpAngleXRef.current;
+      } else if (props.kind === "shipping" || props.kind === "transfer") {
+        const websocket = socketValueRef.current;
+        const http = httpValueRef.current;
+        const mqtt = mqttValueRef.current;
+        const tcp = tcpValueRef.current;
+        const udp = udpValueRef.current;
         newData = { time: getAxisTime(), websocket, http, mqtt, tcp, udp };
       }
+
       const chartLen = chartLengthRef.current;
       const chartVarLen = chartVarLengthRef.current;
 
@@ -128,11 +120,11 @@ const Chart = React.memo((props) => {
     socketAngleXRef,
     socketAngleYRef,
     socketAngleZRef,
-    socketAngleXRef,
-    httpAngleXRef,
-    mqttAngleXRef,
-    tcpAngleXRef,
-    udpAngleXRef,
+    socketValueRef,
+    httpValueRef,
+    mqttValueRef,
+    tcpValueRef,
+    udpValueRef,
     isPaused,
   ]);
 
@@ -160,7 +152,9 @@ const Chart = React.memo((props) => {
     if (props.kind === "orientation") {
       return `Axis ${optionText}`;
     } else if (props.kind === "shipping") {
-      return `${optionText}: X`;
+      return `${optionText} X`;
+    } else if (props.kind === "transfer") {
+      return `${optionText} [ms]`;
     }
   };
 
@@ -224,11 +218,8 @@ const Chart = React.memo((props) => {
           kind={props.kind}
           onGetDataSamples={dataOrientationSamplesHandler}
         />
-      ) : props.kind === "shipping" ? (
-        <ChartSamples
-          kind={props.kind}
-          onGetDataSamples={dataShippingSamplesHandler}
-        />
+      ) : props.kind === "shipping" || props.kind === "transfer" ? (
+        <ChartSamples kind={props.kind} onGetDataSamples={dataSamplesHandler} />
       ) : null}
     </div>
   );
