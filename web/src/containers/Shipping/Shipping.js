@@ -17,11 +17,10 @@ const Shipping = React.memo((props) => {
     (state) => state.protocols.websocket.rawData
   );
   const httpRawData = useSelector((state) => state.protocols.http.rawData);
-  const clientMqtt = useSelector((state) => state.protocols.mqtt.client);
   const messageMqtt = useSelector((state) => state.protocols.mqtt.message);
   const tcpRawData = useSelector((state) => state.protocols.tcp.buffer);
   const udpRawData = useSelector((state) => state.protocols.udp.buffer);
-  const syncTime = useSelector((state) => state.protocols.websocket.syncTime);
+  const syncTime = useSelector((state) => state.protocols.syncTime);
 
   const [options, setOptions] = useState(
     NAMES.map((name) => ({ text: name, active: false }))
@@ -39,7 +38,6 @@ const Shipping = React.memo((props) => {
   const onMqttValue = (data) => dispatch(actions.mqttValueHandler(data));
   const onTcpValue = (data) => dispatch(actions.tcpValueHandler(data));
   const onUdpValue = (data) => dispatch(actions.udpValueHandler(data));
-  const onGetMqttMessage = (client) => dispatch(actions.getMqttMessage(client));
 
   useEffect(() => {
     activeWebsocketRef.current = options[0].active;
@@ -83,7 +81,7 @@ const Shipping = React.memo((props) => {
       if (protocol === "TCP") if (activeTCPRef.current) cb();
       if (protocol === "UDP") if (activeUDPRef.current) cb();
     },
-    [options, clientMqtt]
+    [options]
   );
 
   const bufferToReceivedDataHandler = (type, buffer) => {
@@ -122,10 +120,6 @@ const Shipping = React.memo((props) => {
     const protocol = () => onMqttValue(message);
     protocolActiveHandler("MQTT", protocol);
   }, [messageMqtt]);
-
-  useEffect(() => {
-    onGetMqttMessage(clientMqtt);
-  }, [clientMqtt]);
 
   // TCP
   useEffect(() => {

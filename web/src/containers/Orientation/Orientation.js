@@ -17,7 +17,7 @@ const Orientation = React.memo((props) => {
   const websocketRawData = useSelector(
     (state) => state.protocols.websocket.rawData
   );
-  const syncTime = useSelector((state) => state.protocols.websocket.syncTime);
+  const syncTime = useSelector((state) => state.protocols.syncTime);
 
   const dispatch = useDispatch();
   const onSocketValue = (ws) => dispatch(actions.socketValueHandler(ws));
