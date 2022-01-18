@@ -4,6 +4,7 @@ import { IMU } from "./constants/IMU";
 import { ValueX, AxisX, AxisY } from "./models/Matrix";
 import { fillOutMatirx } from "./controllers/matrix";
 import { initProtocols } from "./controllers/initProtocols";
+import { TOPIC } from "./constants/mqtt";
 import Socket from "./protocols/Socket";
 import Mqtt from "./protocols/Mqtt";
 import Http from "./protocols/Http";
@@ -28,8 +29,6 @@ const sendRawData = (data) => {
   });
 
   // MQTT
-  const TOPIC = Mqtt.getTopic();
-
   Mqtt.getClient().publish(TOPIC, JSON.stringify(rawDataHandler(data)), {
     qos: 0,
     retain: false,
@@ -43,7 +42,7 @@ const sendRawData = (data) => {
 };
 
 const timeSynchronization = () => {
-  const start = new Date().getTime() + 5;
+  const start = new Date().getTime() + 10;
   Socket.getIO().emit("syncTime", { action: "sync", start });
 };
 
@@ -135,9 +134,6 @@ const main = () => {
 
       const angleMedianArrayX = angleArrayXCopy[medianPointerArrayX];
       const angleMedianArrayY = angleArrayYCopy[medianPointerArrayY];
-
-      // console.log("angleMedianArrayX");
-      // console.log(angleMedianArrayX);
 
       ValueX.angle = angleMedianArrayX;
       AxisX.angle = angleMedianArrayX;
