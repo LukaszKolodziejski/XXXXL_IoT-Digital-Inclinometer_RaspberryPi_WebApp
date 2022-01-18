@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Layout from "./hoc/Layout/Layout";
 import Orientation from "./containers/Orientation/Orientation";
 import Shipping from "./containers/Shipping/Shipping";
+import Transfer from "./containers/Transfer/Transfer";
 import { useDispatch } from "react-redux";
 import * as actions from "./store/actions/index";
 
@@ -27,6 +28,7 @@ const App = () => {
       <Layout>
         <Route path="/" component={Orientation} exact />
         <Route path="/shipping" component={Shipping} />
+        <Route path="/transfer-time" component={Transfer} />
       </Layout>
     </Router>
   );
