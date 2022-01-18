@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 
 import Options from "../../components/Options/Options";
 import Chart from "../../components/Chart/Chart";
+import Modifier from "../../components/Modifier/Modifier";
+
 import styles from "./Transfer.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { countAnglesHandler } from "../../utils/utils";
@@ -12,7 +14,7 @@ const NAMES = ["WebSocket", "HTTP", "MQTT", "TCP", "UDP"];
 
 const Transfer = React.memo((props) => {
   const [err, setErr] = useState(null);
-
+  const [approx, setApprox] = useState(20);
   const websocketRawData = useSelector(
     (state) => state.protocols.websocket.rawData
   );
@@ -138,8 +140,8 @@ const Transfer = React.memo((props) => {
   return (
     <div className={styles.Transfer}>
       <Options values={NAMES} onClick={clickOptionItemHandler} />
-      <Chart kind="transfer" options={options} />
-      <div></div>
+      <Chart kind="transfer" options={options} approx={approx} />
+      <Modifier approx={approx} onChangeApprox={setApprox} />
     </div>
   );
 });
