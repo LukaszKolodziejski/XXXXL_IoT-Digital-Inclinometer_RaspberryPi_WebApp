@@ -9,6 +9,8 @@ const ChartSamples = (props) => {
   const tcpValue = useSelector((state) => state.shipping.tcpValue);
   const udpValue = useSelector((state) => state.shipping.udpValue);
 
+  const approxRef = useRef(null);
+
   // ---------- Orientation ------------
   const [samplesX, setSamplesX] = useState(new Array(20).fill(0));
   const [samplesY, setSamplesY] = useState(new Array(20).fill(0));
@@ -26,6 +28,7 @@ const ChartSamples = (props) => {
   const udpRef = useRef(null);
 
   useEffect(() => {
+    approxRef.current = props.approx;
     if (socketValue && props.kind === "orientation") {
       XRef.current = socketValue.angle.X;
       YRef.current = socketValue.angle.Y;
@@ -51,15 +54,22 @@ const ChartSamples = (props) => {
   const [samplesTcpX, setSamplesTcpX] = useState(new Array(20).fill(0));
   const [samplesUdpX, setSamplesUdpX] = useState(new Array(20).fill(0));
 
-  const samplesHandler = (V, setSamples) => {
-    const v = Math.floor(V * 10) / 10;
-    setSamples((prevSamples) => {
-      const copyPrevSamples = [...prevSamples];
-      copyPrevSamples.shift();
-      const newSamples = copyPrevSamples.concat(v);
-      return newSamples;
-    });
-  };
+  const samplesHandler = useCallback(
+    (V, setSamples) => {
+      const v = Math.floor(V * 10) / 10;
+      setSamples((prevSamples) => {
+        const copyPrevSamples = [...prevSamples];
+
+        const diff = copyPrevSamples.length - approxRef.current;
+        if (diff > 0) for (let i = 0; i < diff; i++) copyPrevSamples.shift();
+        else if (diff === 0) copyPrevSamples.shift();
+
+        const newSamples = copyPrevSamples.concat(v);
+        return newSamples;
+      });
+    },
+    [approxRef]
+  );
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -79,15 +89,29 @@ const ChartSamples = (props) => {
   }, []);
 
   useEffect(() => {
+    const selectSamples = (s) => {
+      const approx = approxRef.current;
+      if (props.kind === "transfer") {
+        const v = Math.floor(approx / 2);
+        const arr =
+          approx >= 3 ? (s[v - 1] + s[v] + s[v + 1]) / 3 : s[s.length - 1];
+        return arr;
+      } else {
+        if (s.length >= 5) {
+          const v = Math.floor((approx * 3) / 4);
+          return (s[v - 1] + s[v] + s[v + 1]) / 3;
+        } else return s[s.length - 1];
+      }
+    };
+
     const getDataSamples = (samples) => {
       const sample = [...samples];
       sample.sort((a, b) => a - b);
       let avg;
       if (props.kind === "transfer") {
-        avg = Math.floor((sample[9] + sample[10] + sample[11]) / 3);
+        avg = Math.floor(selectSamples(sample));
       } else {
-        avg =
-          Math.floor(((sample[15] + sample[16] + sample[17]) / 3) * 10) / 10;
+        avg = Math.floor(selectSamples(sample) * 10) / 10;
       }
       return avg;
     };
