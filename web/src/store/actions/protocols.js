@@ -85,30 +85,25 @@ export const httpInit = () => async (dispatch) => {
 // MQTT
 export const mqttInit = () => async (dispatch) => {
   const client = await mqtt.connect(CONNECT_URL, { CLIENT_ID });
+  client.on("connect", () => {
+    const log = (topic) => console.log(`Subscribe: '${topic}'`);
+    client.subscribe(TOPIC, () => log(TOPIC));
+  });
+  client.on("error", (err) => {
+    console.error(`Connection error: ${err}`);
+    client.end();
+  });
+
+  client.on("message", (topic, message) => {
+    dispatch({
+      type: actionTypes.GET_MQTT_MESSAGE,
+      topic,
+      message,
+    });
+  });
+
   dispatch({
     type: actionTypes.MQTT_INIT,
     client,
   });
-};
-
-export const getMqttMessage = (clientMqtt) => async (dispatch) => {
-  if (clientMqtt) {
-    clientMqtt.on("connect", () => {
-      const log = (topic) => console.log(`Subscribe: '${topic}'`);
-      for (let i = 0; i <= 3; i++)
-        clientMqtt.subscribe(TOPIC[i], () => log(TOPIC[i]));
-    });
-    clientMqtt.on("error", (err) => {
-      console.error(`Connection error: ${err}`);
-      clientMqtt.end();
-    });
-
-    clientMqtt.on("message", (topic, message) => {
-      dispatch({
-        type: actionTypes.GET_MQTT_MESSAGE,
-        topic,
-        message,
-      });
-    });
-  }
 };
