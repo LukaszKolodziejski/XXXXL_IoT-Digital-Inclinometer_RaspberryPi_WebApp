@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 
 import Options from "../../components/Options/Options";
 import Chart from "../../components/Chart/Chart";
+import Modifier from "../../components/Modifier/Modifier";
 import styles from "./Orientation.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { countAnglesHandler } from "../../utils/utils";
@@ -13,6 +14,7 @@ const Orientation = React.memo((props) => {
   const [options, setOptions] = useState(
     NAMES.map((name) => ({ text: name, active: false }))
   );
+  const [approx, setApprox] = useState(20);
 
   const websocketRawData = useSelector(
     (state) => state.protocols.websocket.rawData
@@ -56,7 +58,8 @@ const Orientation = React.memo((props) => {
   return (
     <div className={styles.Orientation}>
       <Options text="Axis" values={NAMES} onClick={clickOptionItemHandler} />
-      <Chart kind="orientation" options={options} />
+      <Chart kind="orientation" options={options} approx={approx} />
+      <Modifier approx={approx} onChangeApprox={setApprox} />
     </div>
   );
 });
