@@ -17,7 +17,8 @@
 }
 
 .Button:first-of-type {
-  margin-left: 100px;
+  margin-left: 65px;
+  margin-right: 20px;
 }
 
 .Success {
