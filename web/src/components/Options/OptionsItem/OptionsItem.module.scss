@@ -1,11 +1,4 @@
 .OptionsItem {
-  //   display: block;
-  //   margin: auto;
-  //   float: left;
-  //   float: right;
-
-  //   display: block;
-
   display: flex;
   flex: 1;
   align-items: center;
@@ -13,23 +6,9 @@
 
   height: 40px;
   height: 50px;
-  //   width: 50px;
-  // background-color: rgb(222, 233, 21);
-  // font-size: large;
   font-weight: bold;
-  //   color: rgb(95, 94, 94);
-  // color: rgb(211, 37, 37);
   background-color: rgb(222, 222, 225);
   transition: 0.2s;
-
-  // text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-  // text-shadow: -1px 0 rgb(64, 64, 64), 0 1px rgb(64, 64, 64),
-  //   1px 0 rgb(64, 64, 64), 0 -1px rgb(64, 64, 64);
-  // text-shadow: -1px 0 rgb(50, 50, 50), 0 1px rgb(50, 50, 50),
-  //   1px 0 rgb(50, 50, 50), 0 -1px rgb(50, 50, 50);
-
-  // text-shadow: -0.5px 0 rgb(50, 50, 50), 0 0.5px rgb(50, 50, 50),
-  //   0.5px 0 rgb(50, 50, 50), 0 -0.5px rgb(50, 50, 50);
 
   &:hover {
     cursor: pointer;
@@ -39,7 +18,5 @@
 .Active {
   transition: 1;
   background-color: rgb(213, 213, 216);
-  //   background-color: rgb(164, 155, 144);
-  //   color: rgb(9, 29, 247);
   color: rgb(6, 152, 48);
 }

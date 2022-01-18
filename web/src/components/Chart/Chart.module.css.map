@@ -1,6 +1,6 @@
 {
     "version": 3,
-    "mappings": "",
+    "mappings": "AAMA,AAAA,SAAS,CAAC;EACR,UAAU,EAAE,IAAI;CAOjB;;AARD,AAGE,SAHO,AAGN,YAAY,CAAC;EACZ,OAAO,EAAE,KAAK;EACd,MAAM,EAAE,IAAI;EACZ,gBAAgB,EAAE,OAAgB;CACnC",
     "sources": [
         "Chart.module.scss"
     ],

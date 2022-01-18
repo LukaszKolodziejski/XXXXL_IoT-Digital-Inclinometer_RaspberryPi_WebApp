@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 
 import Options from "../../components/Options/Options";
 import Chart from "../../components/Chart/Chart";
+import Modifier from "../../components/Modifier/Modifier";
+
 import styles from "./Shipping.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { countAnglesHandler } from "../../utils/utils";
@@ -22,6 +24,7 @@ const Shipping = React.memo((props) => {
   const udpRawData = useSelector((state) => state.protocols.udp.buffer);
   const syncTime = useSelector((state) => state.protocols.syncTime);
 
+  const [approx, setApprox] = useState(20);
   const [options, setOptions] = useState(
     NAMES.map((name) => ({ text: name, active: false }))
   );
@@ -138,8 +141,8 @@ const Shipping = React.memo((props) => {
   return (
     <div className={styles.Shipping}>
       <Options values={NAMES} onClick={clickOptionItemHandler} />
-      <Chart kind="shipping" options={options} />
-      <div></div>
+      <Chart kind="shipping" options={options} approx={approx} />
+      <Modifier approx={approx} onChangeApprox={setApprox} />
     </div>
   );
 });

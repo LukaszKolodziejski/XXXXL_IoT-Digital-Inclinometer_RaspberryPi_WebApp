@@ -1,1 +1,10 @@
-/* No CSS *//*# sourceMappingURL=Chart.module.css.map */
+.ChartBtn {
+  margin-top: 20px;
+}
+
+.ChartBtn:first-child {
+  display: block;
+  margin: 50px;
+  background-color: #e91616;
+}
+/*# sourceMappingURL=Chart.module.css.map */

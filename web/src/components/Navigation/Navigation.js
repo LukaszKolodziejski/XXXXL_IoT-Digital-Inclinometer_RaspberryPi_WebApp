@@ -1,9 +1,11 @@
 import React from "react";
-import { BrowserRouter as Router, NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import styles from "./Navigation.module.css";
 import NavigationItem from "./NavigationItem/NavigationItem";
 
 const Navigation = (props) => {
+  const location = useLocation();
+  const refreshPage = () => window.location.reload();
   return (
     <header className={styles.Navigation}>
       <nav className={styles.DeskopOnly}>
@@ -19,8 +21,8 @@ const Navigation = (props) => {
           </NavigationItem>
         </ul>
       </nav>
-      <div className={styles.Logout}>
-        <NavLink to="/reconnect" exact>
+      <div className={styles.Logout} onClick={refreshPage}>
+        <NavLink to={`${location.pathname}`} exact>
           Reconnect
         </NavLink>
       </div>

@@ -1,34 +1,28 @@
 .Options {
   background-color: rgb(137, 137, 164);
-  //   margin: 30% auto;
   display: block;
   width: 80%;
   width: 70%;
   height: auto;
-  //   margin: 50% auto 20px auto;
-  //   margin: 100% auto auto auto;
-  margin: 40vh auto auto auto;
-  margin: 53vh auto auto auto;
-  //   margin: 100% auto 100% auto;
+  margin: auto auto 15vh auto;
   border-radius: 15px;
   padding: 5px;
-  //   margin: auto;
-  //   float: right;
-  //   float: right;
-  //   display: flex;
-  //   flex: 1;
-  //   align-items: center;
-  //   justify-content: center;
-
-  & span {
+  
+  span {
     border-bottom: 2px solid rgb(137, 137, 164);
-
+    
     &:first-child {
       border-radius: 10px 10px 0px 0px;
     }
     &:last-child {
       border-radius: 0px 0px 10px 10px;
       border-bottom: 0px solid #000;
+      
     }
   }
+}
+
+.Options span {
+  border-bottom: 2px solid rgb(137, 137, 164);
+
 }

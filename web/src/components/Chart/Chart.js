@@ -200,26 +200,33 @@ const Chart = React.memo((props) => {
               </AreaChart>
             </Brush>
           </LineChart>
-          <Button btnType={"Success"} clicked={() => setChartData([])}>
-            {`Clear: ${chartData.length}`}
-          </Button>
-          {isOptionActived ? (
-            <Button
-              btnType={isPaused ? "Success" : "Danger"}
-              clicked={pauseHandler}
-            >
-              {!isPaused ? "Pause" : "Go on !!!"}
+          <div className={styles.ChartBtn}>
+            <Button btnType={"Success"} clicked={() => setChartData([])}>
+              {`Clear: ${chartData.length}`}
             </Button>
-          ) : null}
+            {isOptionActived ? (
+              <Button
+                btnType={isPaused ? "Success" : "Danger"}
+                clicked={pauseHandler}
+              >
+                {!isPaused ? "Pause" : "Go on !!!"}
+              </Button>
+            ) : null}
+          </div>
         </div>
       ) : null}
       {props.kind === "orientation" ? (
         <ChartSamples
           kind={props.kind}
+          approx={props.approx}
           onGetDataSamples={dataOrientationSamplesHandler}
         />
       ) : props.kind === "shipping" || props.kind === "transfer" ? (
-        <ChartSamples kind={props.kind} onGetDataSamples={dataSamplesHandler} />
+        <ChartSamples
+          kind={props.kind}
+          approx={props.approx}
+          onGetDataSamples={dataSamplesHandler}
+        />
       ) : null}
     </div>
   );
