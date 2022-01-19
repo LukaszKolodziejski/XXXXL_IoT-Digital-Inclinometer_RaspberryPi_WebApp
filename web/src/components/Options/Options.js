@@ -5,12 +5,15 @@ import OptionsItem from "./OptionsItem/OptionsItem";
 const Options = React.memo((props) => {
   return (
     <div className={styles.Options}>
-      {props.values.map((value) => {
+      {props.options.map((opt, index) => {
         return (
           <OptionsItem
-            key={value}
-            value={value}
+            key={opt.index}
+            index={index}
+            value={opt.text}
             text={props.text}
+            active={opt.active}
+            selected={props.selected}
             onValue={props.onClick}
           />
         );
