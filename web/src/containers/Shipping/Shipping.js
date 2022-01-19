@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { Redirect } from "react-router-dom";
 
 import Options from "../../components/Options/Options";
 import Chart from "../../components/Chart/Chart";
@@ -14,7 +15,9 @@ const NAMES = ["WebSocket", "HTTP", "MQTT", "TCP", "UDP"];
 
 const Shipping = React.memo((props) => {
   const [err, setErr] = useState(null);
-
+  const [optionsIndex, setOptionsIndex] = useState(0);
+  const [isPredict, setIsPredict] = useState(false);
+  const [redirect, setRedirect] = useState("");
   const websocketRawData = useSelector(
     (state) => state.protocols.websocket.rawData
   );
@@ -23,6 +26,7 @@ const Shipping = React.memo((props) => {
   const tcpRawData = useSelector((state) => state.protocols.tcp.buffer);
   const udpRawData = useSelector((state) => state.protocols.udp.buffer);
   const syncTime = useSelector((state) => state.protocols.syncTime);
+  const predictions = useSelector((state) => state.handtrack.predictions);
 
   const [approx, setApprox] = useState(20);
   const [options, setOptions] = useState(
@@ -104,6 +108,40 @@ const Shipping = React.memo((props) => {
     }
   };
 
+  useEffect(() => {
+    const findPredict = predictions.find((pred) => pred.label === "face");
+    setIsPredict(findPredict ? true : false);
+    if (predictions) {
+      const pred = predictions
+        .filter((pred) => pred.label !== "face")
+        .sort((a, b) => (a.bbox[0] > b.bbox[0] && 1) || -1);
+
+      if (pred.length === 1) {
+        const optLength = options.length;
+        const hand = pred[0];
+        if (hand.label === "open") {
+          setOptionsIndex((prev) => (prev < optLength - 1 ? prev + 1 : 0));
+        } else if (hand.label === "point") {
+          setOptions((prevOptions) => {
+            const copyPrevOptions = [...prevOptions];
+            copyPrevOptions[optionsIndex].active =
+              hand.bbox[0] < 250 ? true : false;
+            return copyPrevOptions;
+          });
+        }
+      } else if (pred.length === 2) {
+        const leftHand = pred[0].label;
+        const rightHand = pred[1].label;
+        setTimeout(() => {
+          if (leftHand === "open" && rightHand === "closed") {
+            setRedirect("/transfer-time");
+          } else if (leftHand === "closed" && rightHand === "open")
+            setRedirect("/");
+        }, 700);
+      }
+    }
+  }, [predictions]);
+
   // Websocket
   useEffect(() => {
     protocolActiveHandler("WebSocket", () =>
@@ -138,9 +176,15 @@ const Shipping = React.memo((props) => {
     if (receivedData) protocolActiveHandler("UDP", protocol);
   }, [udpRawData]);
 
+  if (redirect) return <Redirect to={redirect} />;
+
   return (
     <div className={styles.Shipping}>
-      <Options values={NAMES} onClick={clickOptionItemHandler} />
+      <Options
+        options={options}
+        selected={isPredict ? optionsIndex : null}
+        onClick={clickOptionItemHandler}
+      />
       <Chart kind="shipping" options={options} approx={approx} />
       <Modifier approx={approx} onChangeApprox={setApprox} />
     </div>
