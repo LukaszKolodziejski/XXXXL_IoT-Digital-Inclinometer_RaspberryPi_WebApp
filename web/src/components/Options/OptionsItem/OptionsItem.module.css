@@ -2,6 +2,7 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  position: relative;
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
@@ -28,6 +29,18 @@
   -webkit-transition: 1;
   transition: 1;
   background-color: #d5d5d8;
+  color: #069830;
+}
+
+.Selected {
+  position: absolute;
+  display: block;
+  height: 7px;
+  width: 7px;
+  margin-top: -12px;
+  margin-left: 100px;
+  background-color: #ee6312;
+  border-radius: 50%;
   color: #069830;
 }
 /*# sourceMappingURL=OptionsItem.module.css.map */

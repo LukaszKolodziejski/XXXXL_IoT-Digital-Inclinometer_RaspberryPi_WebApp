@@ -1,5 +1,6 @@
 .OptionsItem {
   display: flex;
+  position: relative;
   flex: 1;
   align-items: center;
   justify-content: center;
@@ -18,5 +19,17 @@
 .Active {
   transition: 1;
   background-color: rgb(213, 213, 216);
+  color: rgb(6, 152, 48);
+}
+.Selected {
+  position: absolute;
+  display: block;
+  height: 7px;
+  width: 7px;
+  margin-top: -12px;
+  margin-left: 100px;
+  // transition: 1;
+  background-color: rgb(238, 99, 18);
+  border-radius: 50%;
   color: rgb(6, 152, 48);
 }
