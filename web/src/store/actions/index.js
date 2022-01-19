@@ -1,4 +1,5 @@
 export { socketValueHandler } from "./orientation";
+export { changePredictions } from "./handtrack";
 
 export {
   httpValueHandler,

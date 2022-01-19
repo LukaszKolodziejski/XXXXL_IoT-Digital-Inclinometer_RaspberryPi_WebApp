@@ -21,4 +21,8 @@
   border-radius: 0px 0px 10px 10px;
   border-bottom: 0px solid #000;
 }
+
+.Options span {
+  border-bottom: 2px solid #8989a4;
+}
 /*# sourceMappingURL=Options.module.css.map */
