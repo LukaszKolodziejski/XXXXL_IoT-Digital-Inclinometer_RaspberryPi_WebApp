@@ -62,14 +62,13 @@ const Transfer = React.memo((props) => {
   };
 
   const receivedDataHandler = useCallback(
-    (proof) => {
+    (proof, delay) => {
       if (proof.rawData) {
+        delay ? (delay = 30) : (delay = 0);
         const { data, startTime } = proof.rawData;
         const endTime = new Date().getTime();
-        const transferTime = endTime - startTime - syncTime;
+        const transferTime = Math.abs(endTime - startTime - syncTime - delay);
         const angle = countAnglesHandler(data);
-        // console.log("transferTime");
-        // console.log(transferTime);
 
         return {
           angle,
@@ -97,14 +96,14 @@ const Transfer = React.memo((props) => {
       const stringData = new TextDecoder().decode(view);
       try {
         const rawData = JSON.parse(stringData);
-        return receivedDataHandler({ rawData });
+        return receivedDataHandler({ rawData }, 40);
       } catch (e) {
         setErr(e);
         return null;
       }
     } else if (type === "udp") {
       const rawData = JSON.parse(buffer);
-      return receivedDataHandler({ rawData });
+      return receivedDataHandler({ rawData }, 40);
     }
   };
   useEffect(() => {
