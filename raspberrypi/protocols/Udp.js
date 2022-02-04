@@ -37,6 +37,7 @@ export default {
   },
   initStream: () => {
     const client = Netcat.udpClient(socketPort, "192.168.1.131");
+    // const client = Netcat.udpClient(socketPort, "192.168.1.187");
     socketStreamUdp = client;
 
     client.on("open", () => {

@@ -15,9 +15,6 @@ const initProtocols = () => {
     console.log("Client connected");
   });
 
-  // // // MQTT
-  // Mqtt.init(CONNECT_URL, { clientId: clientId() });
-
   // MQTT
   Mqtt.init(CONNECT_URL);
 
