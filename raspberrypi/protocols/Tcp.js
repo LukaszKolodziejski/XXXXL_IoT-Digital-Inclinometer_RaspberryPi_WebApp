@@ -10,6 +10,7 @@ export default {
 
     const portTCP = port;
     const hostTCP = "192.168.1.131";
+    const clientIP = "192.168.1.187";
 
     const serverTCP = Net.createServer((socket) => {
       serverSocketTcp = socket;
@@ -30,7 +31,6 @@ export default {
     serverTCP.listen(portTCP, hostTCP);
 
     // Client TCP
-
     const clientTCP = new Net.Socket();
     clientTCP.connect(portTCP, hostTCP, () => {
       clientTCP.write("Client TCP is Connected");
