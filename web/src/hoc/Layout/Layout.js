@@ -1,9 +1,9 @@
 import React from "react";
-import "./Layout.css";
+import styles from "../../styles/styles.module.css";
 import Navigation from "../../components/Navigation/Navigation";
 const Layout = (props) => {
   return (
-    <div className="Content">
+    <div className={styles.Layout}>
       <Navigation />
       {props.children}
     </div>

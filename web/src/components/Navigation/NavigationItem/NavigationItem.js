@@ -1,8 +1,8 @@
 import React from "react";
-import { BrowserRouter as Router, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styles from "./NavigationItem.module.css";
 
-const NavigationItem = (props) => {
+const NavigationItem = React.memo((props) => {
   return (
     <div>
       <li className={styles.NavigationItem}>
@@ -16,6 +16,6 @@ const NavigationItem = (props) => {
       </li>
     </div>
   );
-};
+});
 
 export default NavigationItem;

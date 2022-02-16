@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import styles from "./Navigation.module.css";
 import NavigationItem from "./NavigationItem/NavigationItem";
 
-const Navigation = (props) => {
+const Navigation = React.memo((props) => {
   const location = useLocation();
   const refreshPage = () => window.location.reload();
   return (
@@ -28,6 +28,6 @@ const Navigation = (props) => {
       </div>
     </header>
   );
-};
+});
 
 export default Navigation;

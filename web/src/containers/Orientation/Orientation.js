@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import Options from "../../components/Options/Options";
 import Chart from "../../components/Chart/Chart";
 import Modifier from "../../components/Modifier/Modifier";
-import styles from "./Orientation.module.css";
+import styles from "../../styles/styles.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { countAnglesHandler } from "../../utils/utils";
 import * as actions from "../../store/actions/index";
@@ -53,6 +53,7 @@ const Orientation = React.memo((props) => {
     [syncTime]
   );
 
+  /*eslint-disable */
   useEffect(() => {
     const findPredict = predictions.find((pred) => pred.label === "face");
     setIsPredict(findPredict ? true : false);
@@ -91,6 +92,7 @@ const Orientation = React.memo((props) => {
   useEffect(() => {
     onSocketValue(receivedDataHandler(websocketRawData));
   }, [websocketRawData]);
+  /*eslint-enable */
 
   if (redirect) return <Redirect to={redirect} />;
 

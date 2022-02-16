@@ -1,14 +1,13 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styles from "./Options.module.css";
 import OptionsItem from "./OptionsItem/OptionsItem";
 
 const Options = React.memo((props) => {
   return (
     <div className={styles.Options}>
-      {props.options.map((opt, index) => {
-        return (
+      {props.options.map((opt, index) => (
+        <Fragment key={index}>
           <OptionsItem
-            key={opt.index}
             index={index}
             value={opt.text}
             text={props.text}
@@ -16,8 +15,8 @@ const Options = React.memo((props) => {
             selected={props.selected}
             onValue={props.onClick}
           />
-        );
-      })}
+        </Fragment>
+      ))}
     </div>
   );
 });

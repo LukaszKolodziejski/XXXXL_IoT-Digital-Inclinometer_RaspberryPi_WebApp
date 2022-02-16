@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import styles from "./Modifier.module.css";
 import Keyboard from "../../components/Keyboard/Keyboard";
 
-const Modifier = (props) => {
+const Modifier = React.memo((props) => {
   return (
     <Fragment>
       <Keyboard keys={["up", "down"]} onChangeApprox={props.onChangeApprox} />
@@ -17,6 +17,6 @@ const Modifier = (props) => {
       </div>
     </Fragment>
   );
-};
+});
 
 export default Modifier;

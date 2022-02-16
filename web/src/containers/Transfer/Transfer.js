@@ -1,11 +1,11 @@
+/*eslint-disable */
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Redirect } from "react-router-dom";
 
 import Options from "../../components/Options/Options";
 import Chart from "../../components/Chart/Chart";
 import Modifier from "../../components/Modifier/Modifier";
-
-import styles from "./Transfer.module.css";
+import styles from "../../styles/styles.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { countAnglesHandler } from "../../utils/utils";
 import * as actions from "../../store/actions/index";
@@ -13,7 +13,6 @@ import * as actions from "../../store/actions/index";
 const NAMES = ["WebSocket", "HTTP", "MQTT", "TCP", "UDP"];
 
 const Transfer = React.memo((props) => {
-  const [err, setErr] = useState(null);
   const [optionsIndex, setOptionsIndex] = useState(0);
   const [isPredict, setIsPredict] = useState(false);
   const [approx, setApprox] = useState(20);
@@ -98,7 +97,6 @@ const Transfer = React.memo((props) => {
         const rawData = JSON.parse(stringData);
         return receivedDataHandler({ rawData }, 40);
       } catch (e) {
-        setErr(e);
         return null;
       }
     } else if (type === "udp") {
