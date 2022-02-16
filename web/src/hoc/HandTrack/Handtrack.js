@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import * as handTrack from "handtrackjs";
 import * as actions from "../../store/actions/index";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { modelParams } from "../../constants/modelParams";
 import styles from "./Handtrack.module.css";
 
@@ -24,6 +24,7 @@ const Handtrack = (props) => {
     clearInterval(intervalId);
   };
 
+  /*eslint-disable */
   useEffect(() => {
     handTrack.load(modelParams).then((lmodel) => setModel(lmodel));
     const clear = async () => {
@@ -32,6 +33,7 @@ const Handtrack = (props) => {
     };
     clear();
   }, []);
+  /*eslint-enable */
 
   const toggleVideo = async () => {
     if (!isVideo) {
