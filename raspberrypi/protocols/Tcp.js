@@ -37,7 +37,6 @@ export default {
     });
 
     clientTCP.on("data", (buffer) => {
-      // console.log("Received: " + buffer);
       streamTcp.emit("serverDataTCP", { buffer });
     });
 

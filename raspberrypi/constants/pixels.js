@@ -1,4 +1,4 @@
-import { O, Xcolors } from "./colors";
+import { O } from "./colors";
 
 const modelsFrom0to9 = [
   [0, 1, 2, 8, 10, 16, 18, 24, 26, 32, 33, 34], // 0
