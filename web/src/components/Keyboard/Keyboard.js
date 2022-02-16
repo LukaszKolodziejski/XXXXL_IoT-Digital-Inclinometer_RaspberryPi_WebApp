@@ -1,7 +1,7 @@
 import React from "react";
 import KeyboardEventHandler from "react-keyboard-event-handler";
 
-const Keyboard = (props) => {
+const Keyboard = React.memo((props) => {
   const keyDownHandler = (key) => {
     if (key === "up") {
       props.onChangeApprox((prevData) =>
@@ -16,6 +16,6 @@ const Keyboard = (props) => {
   return (
     <KeyboardEventHandler handleKeys={props.keys} onKeyEvent={keyDownHandler} />
   );
-};
+});
 
 export default Keyboard;

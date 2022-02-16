@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 
 import { useSelector } from "react-redux";
 
-const ChartSamples = (props) => {
+const ChartSamples = React.memo((props) => {
   const socketValue = useSelector((state) => state.orientation.socketValue);
   const httpValue = useSelector((state) => state.shipping.httpValue);
   const mqttValue = useSelector((state) => state.shipping.mqttValue);
@@ -71,6 +71,7 @@ const ChartSamples = (props) => {
     [approxRef]
   );
 
+  /*eslint-disable */
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (props.kind === "orientation") {
@@ -139,8 +140,9 @@ const ChartSamples = (props) => {
     samplesTcpX,
     samplesUdpX,
   ]);
+  /*eslint-enable */
 
   return <></>;
-};
+});
 
 export default ChartSamples;
