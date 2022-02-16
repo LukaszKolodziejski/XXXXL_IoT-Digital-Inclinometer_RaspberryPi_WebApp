@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,SAAS,CAAC;EACR,OAAO,EAAE,IAAI;EACb,qBAAqB,EAAE,WAAW;EAClC,MAAM,EAAE,IAAI;EACZ,gBAAgB,EAAE,OAAkB;CAErC",
-    "sources": [
-        "Transfer.module.scss"
-    ],
-    "names": [],
-    "file": "Transfer.module.css"
-}

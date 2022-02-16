@@ -1,0 +1,19 @@
+.Layout {
+  display: block;
+  margin-top: 7.5vh;
+  overflow: auto;
+  background-color: #f2f3f6;
+  height: 92.5vh;
+}
+
+.Shipping,
+.Transfer,
+.Orientation {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 2fr 5fr 2fr;
+      grid-template-columns: 2fr 5fr 2fr;
+  height: 100%;
+  background-color: #eeeeee;
+}
+/*# sourceMappingURL=styles.module.css.map */

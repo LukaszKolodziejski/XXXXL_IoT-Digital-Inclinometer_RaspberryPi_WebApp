@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,YAAY,CAAC;EACX,OAAO,EAAE,IAAI;EACb,qBAAqB,EAAE,WAAW;EAClC,MAAM,EAAE,IAAI;EACZ,gBAAgB,EAAE,OAAkB;CACrC",
-    "sources": [
-        "Orientation.module.scss"
-    ],
-    "names": [],
-    "file": "Orientation.module.css"
-}

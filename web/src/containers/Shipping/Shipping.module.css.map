@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,SAAS,CAAC;EACR,OAAO,EAAE,IAAI;EACb,qBAAqB,EAAE,WAAW;EAClC,MAAM,EAAE,IAAI;EACZ,gBAAgB,EAAE,OAAkB;CACrC",
-    "sources": [
-        "Shipping.module.scss"
-    ],
-    "names": [],
-    "file": "Shipping.module.css"
-}
