@@ -16,6 +16,7 @@ const App = () => {
   const onTcpInit = () => dispatch(actions.tcpInit());
   const onUdpInit = () => dispatch(actions.udpInit());
 
+  /*eslint-disable */
   useEffect(() => {
     onWebSocketInit();
     onHttpInit();
@@ -23,6 +24,7 @@ const App = () => {
     onTcpInit();
     onUdpInit();
   }, []);
+  /*eslint-enable */
 
   return (
     <Router>
