@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-
+import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 
 const ChartSamples = React.memo((props) => {
@@ -144,5 +144,10 @@ const ChartSamples = React.memo((props) => {
 
   return <></>;
 });
+
+ChartSamples.propTypes = {
+  kind: PropTypes.string,
+  approx: PropTypes.number,
+};
 
 export default ChartSamples;

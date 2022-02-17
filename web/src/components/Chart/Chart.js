@@ -12,6 +12,7 @@ import {
   AreaChart,
   Area,
 } from "recharts";
+import PropTypes from "prop-types";
 import ChartSamples from "./ChartSamples/ChartSamples";
 import Button from "../UI/Button/Button";
 import styles from "./Chart.module.css";
@@ -232,5 +233,10 @@ const Chart = React.memo((props) => {
     </div>
   );
 });
+
+Chart.propTypes = {
+  kind: PropTypes.string,
+  approx: PropTypes.number,
+};
 
 export default Chart;

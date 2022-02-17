@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import KeyboardEventHandler from "react-keyboard-event-handler";
 
 const Keyboard = React.memo((props) => {
@@ -17,5 +18,9 @@ const Keyboard = React.memo((props) => {
     <KeyboardEventHandler handleKeys={props.keys} onKeyEvent={keyDownHandler} />
   );
 });
+
+Keyboard.propTypes = {
+  keys: PropTypes.array.isRequired,
+};
 
 export default Keyboard;

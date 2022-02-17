@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import PropTypes from "prop-types";
 import styles from "./Modifier.module.css";
 import Keyboard from "../../components/Keyboard/Keyboard";
 
@@ -18,5 +19,10 @@ const Modifier = React.memo((props) => {
     </Fragment>
   );
 });
+
+Modifier.propTypes = {
+  approx: PropTypes.number.isRequired,
+  onChangeApprox: PropTypes.func.isRequired,
+};
 
 export default Modifier;
