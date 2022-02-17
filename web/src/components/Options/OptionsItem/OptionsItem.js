@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "./OptionsItem.module.css";
 import Status from "../../Status/Status";
 import { COLORS } from "../../../constants/colors";
@@ -22,5 +23,13 @@ const OptionsItem = React.memo((props) => {
     </span>
   );
 });
+
+OptionsItem.propTypes = {
+  value: PropTypes.string,
+  text: PropTypes.string,
+  onValue: PropTypes.func,
+  active: PropTypes.bool,
+  index: PropTypes.number,
+};
 
 export default OptionsItem;
