@@ -8,17 +8,10 @@
 - GPIO Programming to control matrix LED 8x8 (At the same time, the angle of inclination and a spirit level in 2 axes)
  
  
----
----
----
- 
 > ## Overview
 [![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/01-overview.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 
----
----
----
 
 ```js                  
 [ Front-end ]: 
@@ -34,105 +27,291 @@
 ---
 ---
 
-> ## Overview
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/tree/main/web/src/assets/)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+> ## 02-IoT-project-diagram
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/02-IoT-project-diagram.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
 
-> ## 2. Add ingredients and modified new price:
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger/blob/master/src/assets/videos/2-add-ingredients.gif)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+> ## 03-raspberrypi-sensehat
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/03-raspberrypi-sensehat.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
 
-> ## 3. "Order Now" and show first purchase summary:
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger/blob/master/src/assets/videos/3-order-now.gif)](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger)
+
+> ## 04-GIF-moving-the-axis
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/04-GIF-moving-the-axis.gif)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
 
-> ## 4. Simple way from Purchase summary to Form:
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger/blob/master/src/assets/videos/4-purchase-summary.gif)](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger)
+
+> ## 05-1-marked-pixel-fields
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/05-1-marked-pixel-fields.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
 
-> ## 5. Connected "order" and "form" to database in Firebase:
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger/blob/master/src/assets/videos/5-database.gif)](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger)
+
+> ## 05-2-marked-pixel-fields
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/05-2-marked-pixel-fields.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
 
-> ## 6. No authentication === No Orders (Animation with GSAP):
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger/blob/master/src/assets/videos/6-orders.gif)](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger)
+
+> ## 06-sensor-handling-results-ms
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/06-sensor-handling-results-ms.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
 
-> ## 7. Welcome Auth with GSAP 
-> ### Redux is almost everywhere but time to || Redux-Thunk vs Redux-Saga || 
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger/blob/master/src/assets/videos/7-auth.gif)](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger)
+
+> ## 07-data-format-for-sending
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/07-data-format-for-sending.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
 
-> ## 8. Auth (Sign In) (e.g. {Login: "www@ww.ww", Password: "wwwwww" }),
-> ### Or create new account (Sign Up)
-> ### ...to get Token: 
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger/blob/master/src/assets/videos/8-auth-sign-in.gif)](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger)
+
+> ## 08-way-of-testing
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/08-way-of-testing.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
 
-> ## 9. Show Orders ( Must be Authenticated ):
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger/blob/master/src/assets/videos/9-orders-auth.gif)](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger)
+
+> ## 09-sending-tcp-udp
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/09-sending-tcp-udp.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
 
-> ## 10. Refresh page with Localstorage  "Token -> 1h":
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger/blob/master/src/assets/videos/10-refresh.gif)](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger)
+
+> ## 10-sending-ws-http
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/10-sending-ws-http.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
 
-> ## 11. Logout and redirect to /orders
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger/blob/master/src/assets/videos/11-logout.gif)](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger)
+
+> ## 11-sending-mqtt
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/11-sending-mqtt.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
 
-> ## 12. All of steps work the same in all of screen size:
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger/blob/master/src/assets/videos/12-screen-size.gif)](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger)
+
+> ## 12-sending-capacity-ws-http
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/12-sending-capacity-ws-http.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
 
-> ## 13. GSAP & SideDrawer in the Mobile:
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger/blob/master/src/assets/videos/13-sidedrawer-mobile.gif)](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger)
+
+> ## 13-sending-capacity-tcp-udp
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/13-sending-capacity-tcp-udp.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
 
-> ## 14. Fast summary all of steps in mobile version:
-[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger/blob/master/src/assets/videos/14-summary-mobile-version.gif)](https://github.com/LukaszKolodziejski/XXXL_Make-and-Order-Hamburger)
+
+> ## 14-sending-capacity-mqtt
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/14-sending-capacity-mqtt.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
 ---
 ---
-> > # [Welcome to my the Largest and the Best App -> XXXL_Make-and-Order-Hamburger](https://react-build-burger-project.web.app/)
+
+
+> ## 15-time-difference
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/15-time-difference.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 16-app-times-comparison
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/16-app-times-comparison.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 17-receiving-filter
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/17-receiving-filter.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 18-GIF-raspberrypi-web-app2
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/18-GIF-raspberrypi-web-app.gif)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 19-data-reception-ws
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/19-data-reception-ws.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 20-data-flow
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/20-data-flow.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 21-data-reception-tcp-udp
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/21-data-reception-tcp-udp.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 22-data-reception-http-mqtt
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/22-data-reception-http-mqtt.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 23-protractor-test-results
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/23-protractor-test-results.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 24-GIF-walk-in-room
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/24-GIF-walk-in-room.gif)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 25-web-app-diagram
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/25-web-app-diagram.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 26-description-of-the-elements
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/26-description-of-the-elements.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 27-options-and-slider
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/27-options-and-slider.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 28-graph-of-visualized-samples
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/28-graph-of-visualized-samples.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 29-all-the-results
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/29-all-the-results.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 30-all-the-results-without-description
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/30-all-the-results-without-description.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 31-all-the-results-transfer
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/31-all-the-results-transfer.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 32-part-2
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/32-part-2.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 33-description-of-hand-gestures
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/33-description-of-hand-gestures.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 34-GIF-gestures
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/34-GIF-gestures.gif)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 35-GIF-gestures-2-hands
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/35-GIF-gestures-2-hands.gif)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
+
+> ## 36-overview
+[![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/36-overview.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+---
+---
+---
+
 
