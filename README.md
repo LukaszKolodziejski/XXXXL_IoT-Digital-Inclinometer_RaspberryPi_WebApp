@@ -36,7 +36,7 @@
 
 
 > ## An inclinometer is a device that measures the angles of inclination. 
-In this work, it was used:
+> In this work, it was used:
 - Raspberry Pi 3 model B + Single board microcomputer
 - Sense Hat - Shield for Raspberry Pi, containing a 3-axis gyroscope, accelerometer, LED matrix, etc.
 [![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/03-raspberrypi-sensehat.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
@@ -47,7 +47,7 @@ In this work, it was used:
 
 
 > ## Support for the LSM9DS1 sensor 
-from a single board computer with a reading time of no more than a few milliseconds.
+> from a single board computer with a reading time of no more than a few milliseconds.
 [![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/04-GIF-moving-the-axis.gif)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
