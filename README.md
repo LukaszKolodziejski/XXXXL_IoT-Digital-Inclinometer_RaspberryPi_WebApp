@@ -63,7 +63,7 @@
 ---
 
 
-> ## 2.2 Marked pixel fields 2:
+> ## 2.2 Marked pixel fields:
 [![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/05-2-marked-pixel-fields.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
@@ -120,7 +120,7 @@
 ---
 
 
-> ## 4. Comparison of data transfer times in different technologies. Optimization of data transfer time in real time.
+> ## 4. Comparison and optimization of data transfer times in different technologies in real time.
 > ### 4.1 Measurement of communication bandwidth Websocket & HTTP:
 [![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/12-sending-capacity-ws-http.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
