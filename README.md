@@ -307,7 +307,7 @@
 ---
 
 
-> ## Summary
+> ## Summary - Digital Inclinometer for the (IoT) Internet of Things:
 [![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/36-overview.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
