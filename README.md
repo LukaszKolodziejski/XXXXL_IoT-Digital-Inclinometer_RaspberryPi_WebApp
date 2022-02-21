@@ -1,4 +1,4 @@
-# Creating a Digital Inclinometer for the Internet of Things (IoT):
+# Creating a Digital Inclinometer for the (IoT) Internet of Things:
 - Using the sensors from a single board microcomputer with a reading time of a few milliseconds.
 - Development of a real-time raw data sharing system via: TCP, UDP, WebSocket, REST interface (HTTP protocol), MQTT.
 - Compare and optimize data transfer times in real time in different technologies..
@@ -27,7 +27,7 @@
 ---
 ---
 
-> ## 02-IoT-project-diagram
+> ## IoT project diagram:
 [![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/02-IoT-project-diagram.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
@@ -35,7 +35,10 @@
 ---
 
 
-> ## 03-raspberrypi-sensehat
+> ## An inclinometer is a device that measures the angles of inclination. 
+In this work, it was used:
+- Raspberry Pi 3 model B + Single board microcomputer
+- Sense Hat - Shield for Raspberry Pi, containing a 3-axis gyroscope, accelerometer, LED matrix, etc.
 [![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/03-raspberrypi-sensehat.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
@@ -43,7 +46,8 @@
 ---
 
 
-> ## 04-GIF-moving-the-axis
+> ## Support for the LSM9DS1 sensor 
+from a single board computer with a reading time of no more than a few milliseconds.
 [![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/04-GIF-moving-the-axis.gif)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
@@ -307,7 +311,7 @@
 ---
 
 
-> ## 36-overview
+> ## Summary
 [![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/blob/main/web/src/assets/36-overview.jpg?raw=true)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
 
 ---
