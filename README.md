@@ -8,8 +8,17 @@
 - GPIO Programming to control matrix LED 8x8 (At the same time, the angle of inclination and a spirit level in 2 axes)
  
  
+---
+---
+---
+ 
 > ## Overview
 [![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/tree/main/web/src/assets/01-overview.jpg)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
+
+
+---
+---
+---
 
 ```js                  
 [ Front-end ]: 
@@ -20,6 +29,10 @@
               Raspberry Pi, IMU: LSM9DS1 (gyro, accel), TCP, UDP, GPIO
 ```
 
+
+---
+---
+---
 
 > ## Overview
 [![Demo CountPages alpha](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp/tree/main/web/src/assets/)](https://github.com/LukaszKolodziejski/XXXXL_IoT-Digital-Inclinometer_RaspberryPi_WebApp)
